@@ -1,30 +1,33 @@
 package com.calendar.calendar.entities;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @Entity(name = "appointment")
 public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
-    private String titel;
+    @Nonnull
+    private String title;
+    @Nonnull
     private User author;
-    @OneToMany(mappedBy = "appointment")
-    private List<User> invitees;
-    private String location;
-    private String status;
+    @Nullable
     private String description;
+    @Nonnull
     private Timestamp startDateTime;
+    @Nonnull
     private Timestamp endDateTime;
-    private Timestamp created_at;
-
 }
