@@ -1,4 +1,4 @@
-package com.calendar.calendar.repository;
+package com.calendar.calendar.repositories;
 
 import com.calendar.calendar.entities.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
