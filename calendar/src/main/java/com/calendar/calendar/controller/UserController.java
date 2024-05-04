@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/user")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -20,7 +20,7 @@ public class UserController {
     public ResponseEntity<String> createUser(@RequestBody User user) {
         if (userService.create(user))
             return ResponseEntity.ok("Successfully created!");
-        return ResponseEntity.ok("User could not be created!");
+        return ResponseEntity.ok("User already exists!");
     }
 
     @GetMapping("/findUser/{email}")
@@ -30,4 +30,5 @@ public class UserController {
             return ResponseEntity.ok(user);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User could not be found!");
     }
+
 }

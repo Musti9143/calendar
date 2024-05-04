@@ -2,7 +2,6 @@ package com.calendar.calendar.services;
 
 import com.calendar.calendar.entities.User;
 import com.calendar.calendar.repositories.IUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -10,14 +9,17 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    private IUserRepository userRepository;
+    private final IUserRepository userRepository;
 
     public UserService(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public Boolean create(User user) {
-        return userRepository.save(user) != null;
+        User dbUser = userRepository.findByEmail(user.getEmail());
+        if (dbUser == null)
+            return userRepository.save(user) != null;
+        return false;
     }
 
     public void delete(User user) {

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Service
 public class AppointmentService {
-    private IAppointmentRepository appointmentRepository;
+    private final IAppointmentRepository appointmentRepository;
 
     public AppointmentService(IAppointmentRepository appointmentRepository) {
         this.appointmentRepository = appointmentRepository;
