@@ -10,11 +10,14 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    @Autowired
     private IUserRepository userRepository;
 
-    public void create(User user) {
-        userRepository.save(user);
+    public UserService(IUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public Boolean create(User user) {
+        return userRepository.save(user) != null;
     }
 
     public void delete(User user) {
