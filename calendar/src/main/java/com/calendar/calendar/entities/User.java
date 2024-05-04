@@ -20,6 +20,7 @@ import java.util.UUID;
 public class User implements Serializable{
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @Nonnull
