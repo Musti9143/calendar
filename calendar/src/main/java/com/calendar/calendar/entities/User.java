@@ -29,4 +29,11 @@ public class User implements Serializable{
     private String surname;
     @Nonnull
     private String email;
+
+    @Override
+    public String toString(){
+        return  "Name = " + getName() +
+                ", Surname = " + getSurname() +
+                ", Email = " + getEmail();
+    }
 }
