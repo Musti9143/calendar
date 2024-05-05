@@ -37,6 +37,6 @@ public class UserController {
         if (user == null)
             return ResponseEntity.ok("User with given Email does not exist!");
         userService.delete(user);
-        return ResponseEntity.ok(String.format("Successfully deleted {}", email));
+        return ResponseEntity.ok("Successfully deleted {" + user + "}");
     }
 }
