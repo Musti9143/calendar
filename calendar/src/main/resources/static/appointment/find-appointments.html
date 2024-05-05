@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Appointments by Author</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Find Appointments by Author</h2>
+    <form id="findAppointmentsForm">
+        <div class="form-group">
+            <label for="authorEmail">Author Email:</label>
+            <input type="email" class="form-control" id="authorEmail" placeholder="Enter author's email to find appointments" required>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="findAppointments()">Find Appointments</button>
+        <br>
+        <a href="../index.html" class="btn btn-secondary mt-3">Home</a>
+    </form>
+    <pre id="findResult" class="mt-3"></pre>
+</div>
+
+<script>
+    function findAppointments() {
+        const authorEmail = document.getElementById('authorEmail').value;
+
+        fetch(`/api/v1/appointment/findByAuthor/${authorEmail}`, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(appointments => {
+            document.getElementById('findResult').innerText = JSON.stringify(appointments, undefined, 2)
+        })
+        .catch(() => {
+            document.getElementById('findResult').innerText = 'No appointments found for this author.';
+        });
+    }
+</script>
+</body>
+</html>

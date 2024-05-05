@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find User</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Find User</h2>
+    <form id="findUserForm">
+        <div class="form-group">
+            <label for="findEmail">Email:</label>
+            <input type="email" class="form-control" id="findEmail" placeholder="Enter email to find" required>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="findUser()">Find User</button>
+        <br>
+        <a href="../index.html" class="btn btn-secondary mt-3">Home</a>
+    </form>
+    <pre id="findResult" class="mt-3"></pre>
+</div>
+
+<script>
+    function findUser() {
+        const email = document.getElementById('findEmail').value;
+
+        fetch(`/api/v1/user/findUser/${email}`, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(user => {
+            document.getElementById('findResult').innerText = JSON.stringify(user, undefined, 2)
+        })
+        .catch(() => {
+            document.getElementById('findResult').innerText = 'User could not be found!';
+        });
+    }
+</script>
+</body>
+</html>
