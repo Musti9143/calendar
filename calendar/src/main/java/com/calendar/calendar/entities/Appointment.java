@@ -1,12 +1,8 @@
 package com.calendar.calendar.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,12 +18,13 @@ import java.util.UUID;
 public class Appointment implements Serializable {
 
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @Nonnull
     private String title;
     @Nonnull
+    @ManyToOne
+    @JoinColumn(name="author")
     private User author;
     @Nullable
     private String description;
