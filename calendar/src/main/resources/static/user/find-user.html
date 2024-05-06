@@ -28,12 +28,37 @@
         fetch(`/api/v1/user/findUser/${email}`, {
             method: 'GET'
         })
-        .then(response => response.json())
-        .then(user => {
-            document.getElementById('findResult').innerText = JSON.stringify(user, undefined, 2)
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(text);
+                });
+            }
+            return response.json();
         })
-        .catch(() => {
-            document.getElementById('findResult').innerText = 'User could not be found!';
+        .then(user => {
+            const table = `
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>${user.name}</td>
+                            <td>${user.surname}</td>
+                            <td>${user.email}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('findResult').innerHTML = table;
+        })
+        .catch(error => {
+            document.getElementById('findResult').innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div>`;
         });
     }
 </script>

@@ -28,13 +28,52 @@
         fetch(`/api/v1/appointment/findByAuthor/${authorEmail}`, {
             method: 'GET'
         })
-        .then(response => response.json())
-        .then(appointments => {
-            document.getElementById('findResult').innerText = JSON.stringify(appointments, undefined, 2)
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(text);
+                });
+            }
+            return response.json();
         })
-        .catch(() => {
-            document.getElementById('findResult').innerText = 'No appointments found for this author.';
+        .then(appointments => {
+            const table = buildTable(appointments);
+            document.getElementById('findResult').innerHTML = table;
+        })
+        .catch(error => {
+            document.getElementById('findResult').innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div>`;
         });
+    }
+
+    function buildTable(appointments) {
+        let table = `
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Description</th>
+                        <th>Start</th>
+                        <th>End</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+        appointments.forEach(appointment => {
+            table += `
+                <tbody>
+                    <tr>
+                        <td>${appointment.id}</td>
+                        <td>${appointment.title}</td>
+                        <td>${appointment.author.email}</td>
+                        <td>${appointment.description}</td>
+                        <td>${new Date(appointment.startDateTime).toLocaleString()}</td>
+                        <td>${new Date(appointment.endDateTime).toLocaleString()}</td>
+                    </tr>`;
+        });
+
+        table += `</tbody></table>`;
+        return table;
     }
 </script>
 </body>
