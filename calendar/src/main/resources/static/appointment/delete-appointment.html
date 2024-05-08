@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Appointment</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Delete Appointment</h2>
+    <form id="deleteAppointmentForm">
+        <div class="form-group">
+            <label for="appointmentId">Appointment ID:</label>
+            <input type="text" class="form-control" id="appointmentId" placeholder="Enter appointment ID to delete" required>
+        </div>
+        <button type="button" class="btn btn-danger" onclick="deleteAppointment()">Delete Appointment</button>
+        <br>
+        <a href="../index.html" class="btn btn-secondary mt-3">Home</a>
+    </form>
+    <div id="deleteResult" class="mt-3"></div>
+</div>
+
+<script>
+    function deleteAppointment() {
+        const appointmentId = document.getElementById('appointmentId').value;
+
+        fetch(`/api/v1/appointment/delete/${appointmentId}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('deleteResult').innerText = data;
+        })
+        .catch(error => {
+            document.getElementById('deleteResult').innerText = 'Error deleting appointment: ' + error.message;
+        });
+    }
+</script>
+</body>
+</html>
