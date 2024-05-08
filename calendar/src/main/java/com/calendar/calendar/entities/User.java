@@ -30,10 +30,9 @@ public class User implements Serializable{
     @Nonnull
     private String email;
 
-    @Override
-    public String toString(){
-        return  "Name = " + getName() +
-                ", Surname = " + getSurname() +
-                ", Email = " + getEmail();
+    public User (String name, String surname, String email){
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
     }
 }

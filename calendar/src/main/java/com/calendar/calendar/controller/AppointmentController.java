@@ -1,7 +1,7 @@
 package com.calendar.calendar.controller;
 
+import com.calendar.calendar.dto.UserDTO;
 import com.calendar.calendar.entities.Appointment;
-import com.calendar.calendar.entities.User;
 import com.calendar.calendar.services.AppointmentService;
 import com.calendar.calendar.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -30,12 +30,11 @@ public class AppointmentController {
         if(StringUtils.isBlank(email))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
 
-        User user = userService.findUser(email);
-        if(user == null)
+        UserDTO userDTO = userService.findUser(email);
+        if(userDTO == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot create Appointment, User could not be found!");
 
-        appointment.setAuthor(user);
-        appointmentService.create(appointment);
+        appointmentService.create(appointment, userDTO);
         return ResponseEntity.ok("Appointment successfully created!");
     }
 
@@ -50,11 +49,11 @@ public class AppointmentController {
         if(StringUtils.isBlank(email))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
 
-        User user = userService.findUser(email);
-        if(user == null)
+        UserDTO userDTO = userService.findUser(email);
+        if(userDTO == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find Appointment, User doesn't exist!");
 
-        List<Appointment> appointments = appointmentService.findByAuthor(user);
+        List<Appointment> appointments = appointmentService.findByAuthor(userDTO);
         if(appointments != null && !appointments.isEmpty())
             return ResponseEntity.ok(appointments);
         return ResponseEntity.ok("User has no Appointments");
