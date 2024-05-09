@@ -14,12 +14,12 @@ public class UserService {
     private final IUserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserService(IUserRepository userRepository, UserMapper userMapper) {
+    public UserService(final IUserRepository userRepository, final UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
 
-    public Boolean create(UserDTO userDTO) {
+    public boolean create(final UserDTO userDTO) {
         User user = userMapper.toUser(userDTO);
 
         if (userRepository.findByEmail(user.getEmail()) == null) {
@@ -29,7 +29,7 @@ public class UserService {
         return false;
     }
 
-    public boolean delete(String email) {
+    public boolean delete(final String email) {
         User user = userRepository.findByEmail(email);
         if (user == null)
             return false;
@@ -37,15 +37,15 @@ public class UserService {
         return true;
     }
 
-    public void deleteById(UUID id) {
+    public void deleteById(final UUID id) {
         userRepository.deleteById(id);
     }
 
-    public void update(User user) {
+    public void update(final User user) {
         userRepository.save(user);
     }
 
-    public UserDTO findUser(String email) {
+    public UserDTO findUser(final String email) {
         User user = userRepository.findByEmail(email);
         if (user == null)
             return null;

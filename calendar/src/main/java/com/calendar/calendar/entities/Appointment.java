@@ -2,8 +2,12 @@ package com.calendar.calendar.entities;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +16,6 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "appointment")
 public class Appointment implements Serializable {
@@ -32,4 +35,12 @@ public class Appointment implements Serializable {
     private Timestamp startDateTime;
     @Nonnull
     private Timestamp endDateTime;
+
+    public Appointment(@Nonnull final String title, @Nonnull final User author, @Nonnull final Timestamp startDateTime, @Nonnull final Timestamp endDateTime, @Nullable final String description) {
+        this.title = title;
+        this.author = author;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.description = description;
+    }
 }

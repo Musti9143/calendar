@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface IAppointmentRepository extends JpaRepository<Appointment, UUID>{
-    List<Appointment> findByAuthor(User author);
+    List<Appointment> findByAuthor(final User author);
 
 }
