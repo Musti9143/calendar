@@ -1,5 +1,6 @@
 package com.calendar.calendar.services;
 
+import com.calendar.calendar.dto.UserDTO;
 import com.calendar.calendar.entities.Appointment;
 import com.calendar.calendar.entities.User;
 import com.calendar.calendar.repositories.IAppointmentRepository;
@@ -16,7 +17,7 @@ public class AppointmentService {
         this.appointmentRepository = appointmentRepository;
     }
 
-    public void create(Appointment appointment) {
+    public void create(Appointment appointment, UserDTO userDTO) {
         appointmentRepository.save(appointment);
     }
 
@@ -32,7 +33,8 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
     }
 
-    public List<Appointment> findByAuthor(User author) {
+    public List<Appointment> findByAuthor(UserDTO authorDto) {
+        User author = new User();
         return appointmentRepository.findByAuthor(author);
     }
 
