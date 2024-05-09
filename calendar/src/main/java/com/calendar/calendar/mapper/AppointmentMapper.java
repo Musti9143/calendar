@@ -5,7 +5,9 @@ import com.calendar.calendar.dto.AppointmentDTO;
 import com.calendar.calendar.dto.UserDTO;
 import com.calendar.calendar.entities.Appointment;
 import com.calendar.calendar.entities.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AppointmentMapper {
     private final UserMapper userMapper;
 
