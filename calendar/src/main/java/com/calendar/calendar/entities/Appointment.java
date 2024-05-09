@@ -32,4 +32,12 @@ public class Appointment implements Serializable {
     private Timestamp startDateTime;
     @Nonnull
     private Timestamp endDateTime;
+
+    public Appointment(String title, User author, Timestamp startDateTime, Timestamp endDateTime, String description) {
+        this.title = title;
+        this.author = author;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.description = description;
+    }
 }
