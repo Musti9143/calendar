@@ -19,13 +19,13 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final UserService userService;
 
-    public AppointmentController(AppointmentService appointmentService, UserService userService) {
+    public AppointmentController(final AppointmentService appointmentService, final UserService userService) {
         this.appointmentService = appointmentService;
         this.userService = userService;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createAppointment(@RequestBody Appointment appointment) {
+    public ResponseEntity<String> createAppointment(@RequestBody final Appointment appointment) {
         String email = appointment.getAuthor().getEmail();
         if(StringUtils.isBlank(email))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
@@ -39,13 +39,13 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteAppointment(@PathVariable UUID id) {
+    public ResponseEntity<String> deleteAppointment(@PathVariable final UUID id) {
         appointmentService.deleteById(id);
         return ResponseEntity.ok("Appointment successfully deleted!");
     }
 
     @GetMapping("/findByAuthor/{email}")
-    public ResponseEntity<?> findAppointmentsByAuthor(@PathVariable String email){
+    public ResponseEntity<?> findAppointmentsByAuthor(@PathVariable final String email){
         if(StringUtils.isBlank(email))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
 
@@ -58,5 +58,4 @@ public class AppointmentController {
             return ResponseEntity.ok(appointments);
         return ResponseEntity.ok("User has no Appointments");
     }
-
 }
