@@ -1,7 +1,10 @@
 package com.calendar.calendar.controller;
 
+import com.calendar.calendar.communication.in.AppointmentRequest;
+import com.calendar.calendar.dto.AppointmentDTO;
 import com.calendar.calendar.dto.UserDTO;
 import com.calendar.calendar.entities.Appointment;
+import com.calendar.calendar.mapper.AppointmentMapper;
 import com.calendar.calendar.services.AppointmentService;
 import com.calendar.calendar.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -18,24 +21,23 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
     private final UserService userService;
+    private final AppointmentMapper appointmentMapper;
 
-    public AppointmentController(final AppointmentService appointmentService, final UserService userService) {
+    public AppointmentController(final AppointmentService appointmentService, final UserService userService, final AppointmentMapper appointmentMapper) {
         this.appointmentService = appointmentService;
         this.userService = userService;
+        this.appointmentMapper = appointmentMapper;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createAppointment(@RequestBody final Appointment appointment) {
-        String email = appointment.getAuthor().getEmail();
+    public ResponseEntity<String> createAppointment(@RequestBody final AppointmentRequest appointmentRequest) {
+        final String email = appointmentRequest.author();
         if(StringUtils.isBlank(email))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
 
-        UserDTO userDTO = userService.findUser(email);
-        if(userDTO == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot create Appointment, User could not be found!");
+        final AppointmentDTO appointmentDTO = appointmentMapper.toAppointmentDto(appointmentRequest);
 
-        appointmentService.create(appointment, userDTO);
-        return ResponseEntity.ok("Appointment successfully created!");
+        return appointmentService.create(appointmentDTO);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -49,7 +51,7 @@ public class AppointmentController {
         if(StringUtils.isBlank(email))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
 
-        UserDTO userDTO = userService.findUser(email);
+        final UserDTO userDTO = userService.findUser(email);
         if(userDTO == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find Appointment, User doesn't exist!");
 

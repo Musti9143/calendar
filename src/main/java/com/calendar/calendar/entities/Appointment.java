@@ -27,7 +27,7 @@ public class Appointment implements Serializable {
     private String title;
     @Nonnull
     @ManyToOne
-    @JoinColumn(name="author")
+    @JoinColumn(name="author", referencedColumnName = "email")
     private User author;
     @Nullable
     private String description;
