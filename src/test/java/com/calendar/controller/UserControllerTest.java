@@ -1,4 +1,4 @@
-package com.calendar.calendar.controller;
+package com.calendar.controller;
 
 import com.calendar.communication.in.UserRequest;
 

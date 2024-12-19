@@ -1,4 +1,4 @@
-package com.calendar.calendar.communication.in;
+package com.calendar.communication.in;
 
 import com.calendar.communication.in.UserRequest;
 import org.junit.jupiter.params.ParameterizedTest;

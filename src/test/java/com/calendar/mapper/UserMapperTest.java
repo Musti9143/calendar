@@ -1,4 +1,4 @@
-package com.calendar.calendar.mapper;
+package com.calendar.mapper;
 
 import com.calendar.communication.in.UserRequest;
 import com.calendar.dto.UserDTO;
