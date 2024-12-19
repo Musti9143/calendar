@@ -1,12 +1,12 @@
-package com.calendar.calendar.services;
+package com.calendar.services;
 
-import com.calendar.calendar.dto.AppointmentDTO;
-import com.calendar.calendar.dto.UserDTO;
-import com.calendar.calendar.entities.Appointment;
-import com.calendar.calendar.entities.User;
-import com.calendar.calendar.mapper.AppointmentMapper;
-import com.calendar.calendar.repositories.IAppointmentRepository;
-import com.calendar.calendar.repositories.IUserRepository;
+import com.calendar.dto.AppointmentDTO;
+import com.calendar.dto.UserDTO;
+import com.calendar.entities.Appointment;
+import com.calendar.entities.User;
+import com.calendar.mapper.AppointmentMapper;
+import com.calendar.repositories.IAppointmentRepository;
+import com.calendar.repositories.IUserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

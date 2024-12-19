@@ -1,8 +1,9 @@
 package com.calendar.calendar.mapper;
 
-import com.calendar.calendar.communication.in.UserRequest;
-import com.calendar.calendar.dto.UserDTO;
-import com.calendar.calendar.entities.User;
+import com.calendar.communication.in.UserRequest;
+import com.calendar.dto.UserDTO;
+import com.calendar.entities.User;
+import com.calendar.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

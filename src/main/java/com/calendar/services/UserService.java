@@ -1,9 +1,9 @@
-package com.calendar.calendar.services;
+package com.calendar.services;
 
-import com.calendar.calendar.dto.UserDTO;
-import com.calendar.calendar.entities.User;
-import com.calendar.calendar.mapper.UserMapper;
-import com.calendar.calendar.repositories.IUserRepository;
+import com.calendar.dto.UserDTO;
+import com.calendar.entities.User;
+import com.calendar.mapper.UserMapper;
+import com.calendar.repositories.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

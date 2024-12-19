@@ -1,12 +1,12 @@
-package com.calendar.calendar.controller;
+package com.calendar.controller;
 
-import com.calendar.calendar.communication.in.AppointmentRequest;
-import com.calendar.calendar.dto.AppointmentDTO;
-import com.calendar.calendar.dto.UserDTO;
-import com.calendar.calendar.entities.Appointment;
-import com.calendar.calendar.mapper.AppointmentMapper;
-import com.calendar.calendar.services.AppointmentService;
-import com.calendar.calendar.services.UserService;
+import com.calendar.communication.in.AppointmentRequest;
+import com.calendar.dto.AppointmentDTO;
+import com.calendar.dto.UserDTO;
+import com.calendar.entities.Appointment;
+import com.calendar.mapper.AppointmentMapper;
+import com.calendar.services.AppointmentService;
+import com.calendar.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

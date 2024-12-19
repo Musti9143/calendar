@@ -1,4 +1,4 @@
-package com.calendar.calendar.communication.in;
+package com.calendar.communication.in;
 
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,4 +1,4 @@
-package com.calendar.calendar.communication.out;
+package com.calendar.communication.out;
 
 import java.sql.Timestamp;
 

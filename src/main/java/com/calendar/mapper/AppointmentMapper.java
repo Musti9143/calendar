@@ -1,9 +1,9 @@
-package com.calendar.calendar.mapper;
+package com.calendar.mapper;
 
-import com.calendar.calendar.communication.in.AppointmentRequest;
-import com.calendar.calendar.dto.AppointmentDTO;
-import com.calendar.calendar.entities.Appointment;
-import com.calendar.calendar.entities.User;
+import com.calendar.communication.in.AppointmentRequest;
+import com.calendar.dto.AppointmentDTO;
+import com.calendar.entities.Appointment;
+import com.calendar.entities.User;
 import org.springframework.stereotype.Component;
 
 @Component

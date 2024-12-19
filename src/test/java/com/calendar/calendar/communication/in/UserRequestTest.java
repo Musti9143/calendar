@@ -1,5 +1,6 @@
 package com.calendar.calendar.communication.in;
 
+import com.calendar.communication.in.UserRequest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 

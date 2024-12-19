@@ -1,4 +1,4 @@
-package com.calendar.calendar.entities;
+package com.calendar.entities;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

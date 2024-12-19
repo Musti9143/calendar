@@ -1,9 +1,9 @@
-package com.calendar.calendar.controller;
+package com.calendar.controller;
 
-import com.calendar.calendar.communication.in.UserRequest;
-import com.calendar.calendar.dto.UserDTO;
-import com.calendar.calendar.mapper.UserMapper;
-import com.calendar.calendar.services.UserService;
+import com.calendar.services.UserService;
+import com.calendar.communication.in.UserRequest;
+import com.calendar.dto.UserDTO;
+import com.calendar.mapper.UserMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

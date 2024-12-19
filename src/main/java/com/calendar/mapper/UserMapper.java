@@ -1,8 +1,8 @@
-package com.calendar.calendar.mapper;
+package com.calendar.mapper;
 
-import com.calendar.calendar.communication.in.UserRequest;
-import com.calendar.calendar.dto.UserDTO;
-import com.calendar.calendar.entities.User;
+import com.calendar.entities.User;
+import com.calendar.communication.in.UserRequest;
+import com.calendar.dto.UserDTO;
 import org.springframework.stereotype.Component;
 
 @Component
