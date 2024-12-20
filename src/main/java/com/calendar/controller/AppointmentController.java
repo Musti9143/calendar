@@ -1,8 +1,8 @@
 package com.calendar.controller;
 
 import com.calendar.communication.in.AppointmentRequest;
+import com.calendar.communication.in.UserRequest;
 import com.calendar.dto.AppointmentDTO;
-import com.calendar.dto.UserDTO;
 import com.calendar.entities.Appointment;
 import com.calendar.mapper.AppointmentMapper;
 import com.calendar.services.AppointmentService;
@@ -46,18 +46,18 @@ public class AppointmentController {
         return ResponseEntity.ok("Appointment successfully deleted!");
     }
 
-    @GetMapping("/findByAuthor/{email}")
-    public ResponseEntity<?> findAppointmentsByAuthor(@PathVariable final String email){
-        if(StringUtils.isBlank(email))
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
-
-        final UserDTO userDTO = userService.findUser(email);
-        if(userDTO == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find Appointment, User doesn't exist!");
-
-        List<Appointment> appointments = appointmentService.findByAuthor(userDTO);
-        if(appointments != null && !appointments.isEmpty())
-            return ResponseEntity.ok(appointments);
-        return ResponseEntity.ok("User has no Appointments");
-    }
+//    @GetMapping("/findByAuthor/{email}")
+//    public ResponseEntity<?> findAppointmentsByAuthor(@PathVariable final String email){
+//        if(StringUtils.isBlank(email))
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
+//
+//        final UserRequest userRequest = userService.findUser(email);
+//        if(userRequest == null)
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find Appointment, User doesn't exist!");
+//
+//        List<Appointment> appointments = appointmentService.findByAuthor(userRequest);
+//        if(appointments != null && !appointments.isEmpty())
+//            return ResponseEntity.ok(appointments);
+//        return ResponseEntity.ok("User has no Appointments");
+//    }
 }

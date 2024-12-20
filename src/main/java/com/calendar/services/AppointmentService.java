@@ -1,7 +1,6 @@
 package com.calendar.services;
 
 import com.calendar.dto.AppointmentDTO;
-import com.calendar.dto.UserDTO;
 import com.calendar.entities.Appointment;
 import com.calendar.entities.User;
 import com.calendar.mapper.AppointmentMapper;
@@ -46,11 +45,6 @@ public class AppointmentService {
 
     public void update(final Appointment appointment) {
         appointmentRepository.save(appointment);
-    }
-
-    public List<Appointment> findByAuthor(final UserDTO authorDto) {
-        User author = new User();
-        return appointmentRepository.findByAuthor(author);
     }
 
 }

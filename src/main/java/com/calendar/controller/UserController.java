@@ -1,9 +1,8 @@
 package com.calendar.controller;
 
-import com.calendar.services.UserService;
 import com.calendar.communication.in.UserRequest;
-import com.calendar.dto.UserDTO;
-import com.calendar.mapper.UserMapper;
+import com.calendar.communication.out.UserResponse;
+import com.calendar.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +12,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
 
-    public UserController(final UserService userService, final UserMapper userMapper) {
+    public UserController(final UserService userService) {
         this.userService = userService;
-        this.userMapper = userMapper;
     }
 
     @PostMapping("/create")
@@ -25,18 +22,16 @@ public class UserController {
         if (!userRequest.isValid())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something missing!");
 
-        UserDTO userDTO = userMapper.toUserDto(userRequest);
-
-        if (userService.create(userDTO))
+        if (userService.create(userRequest))
             return ResponseEntity.ok("Successfully created!");
         return ResponseEntity.ok("User already exists!");
     }
 
     @GetMapping("/findUser/{email}")
     public ResponseEntity<?> findUser(@PathVariable final String email){
-        UserDTO userDTO = userService.findUser(email);
-        if(userDTO != null)
-            return ResponseEntity.ok(userDTO);
+        final UserResponse userResponse = userService.findUser(email);
+        if(userResponse != null)
+            return ResponseEntity.ok(userResponse);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User could not be found!");
     }
 

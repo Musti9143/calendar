@@ -1,6 +1,7 @@
 package com.calendar.services;
 
-import com.calendar.dto.UserDTO;
+import com.calendar.communication.in.UserRequest;
+import com.calendar.communication.out.UserResponse;
 import com.calendar.entities.User;
 import com.calendar.mapper.UserMapper;
 import com.calendar.repositories.IUserRepository;
@@ -19,8 +20,8 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public boolean create(final UserDTO userDTO) {
-        User user = userMapper.toUser(userDTO);
+    public boolean create(final UserRequest userRequest) {
+        User user = userMapper.toUser(userRequest);
 
         if (userRepository.findByEmail(user.getEmail()) == null) {
             userRepository.save(user);
@@ -45,10 +46,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public UserDTO findUser(final String email) {
+    public UserResponse findUser(final String email) {
+
         User user = userRepository.findByEmail(email);
         if (user == null)
             return null;
-        return userMapper.toUserDto(user);
+        return userMapper.toUserResponse(user);
     }
 }
