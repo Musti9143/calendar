@@ -1,10 +1,8 @@
 package com.calendar.controller;
 
 import com.calendar.communication.in.AppointmentRequest;
-import com.calendar.dto.AppointmentDTO;
 import com.calendar.dto.UserDTO;
 import com.calendar.entities.Appointment;
-import com.calendar.mapper.AppointmentMapper;
 import com.calendar.services.AppointmentService;
 import com.calendar.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -21,12 +19,10 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
     private final UserService userService;
-    private final AppointmentMapper appointmentMapper;
 
-    public AppointmentController(final AppointmentService appointmentService, final UserService userService, final AppointmentMapper appointmentMapper) {
+    public AppointmentController(final AppointmentService appointmentService, final UserService userService) {
         this.appointmentService = appointmentService;
         this.userService = userService;
-        this.appointmentMapper = appointmentMapper;
     }
 
     @PostMapping("/create")
@@ -35,9 +31,7 @@ public class AppointmentController {
         if(StringUtils.isBlank(email))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
 
-        final AppointmentDTO appointmentDTO = appointmentMapper.toAppointmentDto(appointmentRequest);
-
-        return appointmentService.create(appointmentDTO);
+        return appointmentService.create(appointmentRequest);
     }
 
     @DeleteMapping("/delete/{id}")
