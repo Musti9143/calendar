@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -35,6 +36,18 @@ class UserServiceTest {
 
         verify(userRepository, times(1)).save(user);
         assertTrue(userService.create(userRequest));
+    }
+
+    @Test
+    void create_shouldReturnFalse_whenUserAlreadyExists() {
+        final UserRequest userRequest = new UserRequest("Max", "Power", "max.power@email.com");
+        final User user = new User("Max", "Power", "max.power@email.com");
+
+        when(userMapper.toUser(userRequest)).thenReturn(user);
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+
+        verify(userRepository, never()).save(any());
+        assertFalse(userService.create(userRequest));
     }
 
     @Test
