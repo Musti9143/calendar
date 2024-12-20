@@ -3,19 +3,13 @@ package com.calendar.mapper;
 import com.calendar.communication.in.UserRequest;
 import com.calendar.communication.out.UserResponse;
 import com.calendar.entities.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserMapperTest {
 
-    private UserMapper userMapper;
-
-    @BeforeEach
-    void setup() {
-        userMapper = new UserMapper();
-    }
+    private final UserMapper userMapper = new UserMapper();
 
     @Test
     void toUser_shouldMapUserRequestToUser() {

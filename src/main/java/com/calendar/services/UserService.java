@@ -21,7 +21,7 @@ public class UserService {
     }
 
     public boolean create(final UserRequest userRequest) {
-        User user = userMapper.toUser(userRequest);
+        final User user = userMapper.toUser(userRequest);
 
         if (userRepository.findByEmail(user.getEmail()) == null) {
             userRepository.save(user);
@@ -31,7 +31,8 @@ public class UserService {
     }
 
     public boolean delete(final String email) {
-        User user = userRepository.findByEmail(email);
+
+        final User user = userRepository.findByEmail(email);
         if (user == null)
             return false;
         userRepository.delete(user);
@@ -39,16 +40,18 @@ public class UserService {
     }
 
     public void deleteById(final UUID id) {
+
         userRepository.deleteById(id);
     }
 
     public void update(final User user) {
+
         userRepository.save(user);
     }
 
     public UserResponse findUser(final String email) {
 
-        User user = userRepository.findByEmail(email);
+        final User user = userRepository.findByEmail(email);
         if (user == null)
             return null;
         return userMapper.toUserResponse(user);
