@@ -1,16 +1,13 @@
 package com.calendar.controller;
 
 import com.calendar.communication.in.AppointmentRequest;
-import com.calendar.communication.in.UserRequest;
-import com.calendar.entities.Appointment;
 import com.calendar.services.AppointmentService;
 import com.calendar.services.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController

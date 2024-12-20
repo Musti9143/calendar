@@ -1,7 +1,7 @@
 package com.calendar.repositories;
 
-import com.calendar.entities.User;
 import com.calendar.entities.Appointment;
+import com.calendar.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
