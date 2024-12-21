@@ -1,6 +1,7 @@
 package com.calendar.services;
 
 import com.calendar.communication.in.UserRequest;
+import com.calendar.communication.out.UserResponse;
 import com.calendar.entities.User;
 import com.calendar.mapper.UserMapper;
 import com.calendar.repositories.IUserRepository;
@@ -10,8 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,8 +34,8 @@ class UserServiceTest {
         when(userMapper.toUser(userRequest)).thenReturn(user);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
 
-        verify(userRepository, times(1)).save(user);
         assertTrue(userService.create(userRequest));
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
@@ -46,8 +46,8 @@ class UserServiceTest {
         when(userMapper.toUser(userRequest)).thenReturn(user);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
 
-        verify(userRepository, never()).save(any());
         assertFalse(userService.create(userRequest));
+        verify(userRepository, never()).save(any());
     }
 
     @Test
@@ -56,8 +56,8 @@ class UserServiceTest {
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
 
-        verify(userRepository, never()).delete(any());
         assertFalse(userService.delete(user.getEmail()));
+        verify(userRepository, never()).delete(any());
     }
 
     @Test
@@ -66,9 +66,8 @@ class UserServiceTest {
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
 
-        //TODO: verify does not work with checking for deletion
-        //verify(userRepository, times(1)).delete(user);
         assertTrue(userService.delete(user.getEmail()));
+        verify(userRepository, times(1)).delete(user);
     }
 
     @Test
@@ -80,6 +79,34 @@ class UserServiceTest {
     }
 
     @Test
-    void findUser() {
+    void findUser_shouldReturnNullWhenUserNotFound() {
+        when(userRepository.findByEmail("max.power@email.com")).thenReturn(null);
+
+        UserResponse result = userService.findUser("max.power@email.com");
+
+        assertNull(result);
+
+        verify(userRepository, times(1)).findByEmail("max.power@email.com");
+        verify(userMapper, never()).toUserResponse(any());
+
+    }
+
+    @Test
+    void findUser_shouldReturnUserResponseWhenUserIsFound() {
+        final User user = new User("Max", "Power", "max.power@email.com");
+        final UserResponse userResponse = new UserResponse("Max", "Power", "max.power@email.com");
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+        when(userMapper.toUserResponse(user)).thenReturn(userResponse);
+
+        UserResponse result = userService.findUser("max.power@email.com");
+
+        assertNotNull(result);
+        assertEquals("Max", result.name());
+        assertEquals("Power", result.surname());
+        assertEquals("max.power@email.com", result.email());
+
+        verify(userRepository, times(1)).findByEmail("max.power@email.com");
+        verify(userMapper, times(1)).toUserResponse(user);
     }
 }
