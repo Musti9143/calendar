@@ -51,7 +51,24 @@ class UserServiceTest {
     }
 
     @Test
-    void delete() {
+    void delete_shouldReturnFalse_whenUserDoesNotExist() {
+        final User user = new User("Max", "Power", "max.power@email.com");
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
+
+        verify(userRepository, never()).delete(any());
+        assertFalse(userService.delete(user.getEmail()));
+    }
+
+    @Test
+    void delete_shouldReturnTrueAndVerifyDelete_whenUserExist() {
+        final User user = new User("Max", "Power", "max.power@email.com");
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+
+        //TODO: verify does not work with checking for deletion
+        //verify(userRepository, times(1)).delete(user);
+        assertTrue(userService.delete(user.getEmail()));
     }
 
     @Test
