@@ -13,7 +13,7 @@ public class WebConfig {
         final FilterRegistrationBean<RequestResponseLoggingFilter> registrationBean = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new RequestResponseLoggingFilter());
-        registrationBean.addUrlPatterns("/*");
+        registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(Integer.MAX_VALUE);
 
         return registrationBean;

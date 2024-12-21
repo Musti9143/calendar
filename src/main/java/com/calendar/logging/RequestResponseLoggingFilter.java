@@ -25,24 +25,18 @@ public class RequestResponseLoggingFilter implements Filter {
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
             throws IOException, ServletException {
 
-        final String uri = ((HttpServletRequest) request).getRequestURI();
+        final long startTime = System.currentTimeMillis();
+        final RequestWrapper requestWrapper = new RequestWrapper((HttpServletRequest) request);
+        final ResponseWrapper responseWrapper = new ResponseWrapper((HttpServletResponse) response);
+        final String requestId = UUID.randomUUID().toString();
 
-        if (uri.startsWith("/api/")) {
-            final long startTime = System.currentTimeMillis();
-            final RequestWrapper requestWrapper = new RequestWrapper((HttpServletRequest) request);
-            final ResponseWrapper responseWrapper = new ResponseWrapper((HttpServletResponse) response);
-            final String requestId = UUID.randomUUID().toString();
-
-            try {
-                logRequest(requestWrapper, requestId);
-                chain.doFilter(requestWrapper, responseWrapper);
-                final long duration = System.currentTimeMillis() - startTime;
-                logResponse(responseWrapper, requestId, duration);
-            } finally {
-                destroy();
-            }
-        } else {
-            chain.doFilter(request, response);
+        try {
+            logRequest(requestWrapper, requestId);
+            chain.doFilter(requestWrapper, responseWrapper);
+            final long duration = System.currentTimeMillis() - startTime;
+            logResponse(responseWrapper, requestId, duration);
+        } finally {
+            destroy();
         }
     }
 
@@ -189,14 +183,14 @@ public class RequestResponseLoggingFilter implements Filter {
     }
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        private record RequestLogData(String id, String method, String requestUri, Object requestBody) {
+        private record RequestLogData(String requestId, String method, String requestUri, Object requestBody) {
     }
 
     private record ResponseLog(ResponseLogData responseLogData) {
     }
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private record ResponseLogData(String id, @JsonIgnore long duration, Integer responseStatus, Object responseBody) {
+    private record ResponseLogData(String responseToRequestId, @JsonIgnore long duration, Integer responseStatus, Object responseBody) {
         @JsonProperty("duration")
         public String getFormattedDuration() {
             if (duration < 1000) {
