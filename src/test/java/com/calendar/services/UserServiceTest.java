@@ -79,7 +79,7 @@ class UserServiceTest {
     }
 
     @Test
-    void findUser_shouldReturnNullWhenUserNotFound() {
+    void findUser_shouldReturnNull_WhenUserNotFound() {
         when(userRepository.findByEmail("max.power@email.com")).thenReturn(null);
 
         UserResponse result = userService.findUser("max.power@email.com");
@@ -92,7 +92,7 @@ class UserServiceTest {
     }
 
     @Test
-    void findUser_shouldReturnUserResponseWhenUserIsFound() {
+    void findUser_shouldReturnUserResponse_WhenUserIsFound() {
         final User user = new User("Max", "Power", "max.power@email.com");
         final UserResponse userResponse = new UserResponse("Max", "Power", "max.power@email.com");
 
