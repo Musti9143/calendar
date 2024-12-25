@@ -71,14 +71,6 @@ class UserServiceTest {
     }
 
     @Test
-    void deleteById() {
-    }
-
-    @Test
-    void update() {
-    }
-
-    @Test
     void findUser_shouldReturnNull_WhenUserNotFound() {
         when(userRepository.findByEmail("max.power@email.com")).thenReturn(null);
 
