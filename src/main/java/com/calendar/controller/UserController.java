@@ -14,11 +14,13 @@ public class UserController {
     private final UserService userService;
 
     public UserController(final UserService userService) {
+
         this.userService = userService;
     }
 
     @PostMapping("/create")
     public ResponseEntity<String> createUser(@RequestBody final UserRequest userRequest) {
+
         if (!userRequest.isValid())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something missing!");
 
@@ -29,6 +31,7 @@ public class UserController {
 
     @GetMapping("/findUser/{email}")
     public ResponseEntity<?> findUser(@PathVariable final String email){
+
         final UserResponse userResponse = userService.findUser(email);
         if(userResponse != null)
             return ResponseEntity.ok(userResponse);
@@ -37,6 +40,7 @@ public class UserController {
 
     @DeleteMapping("/delete/{email}")
     public ResponseEntity<String> deleteUser(@PathVariable final String email) {
+
         if (userService.delete(email))
             return ResponseEntity.ok("Successfully deleted {" + email + "}");
         return ResponseEntity.ok("User with given Email does not exist!");
