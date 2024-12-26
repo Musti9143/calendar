@@ -37,18 +37,21 @@ public class AppointmentController {
         return ResponseEntity.ok("Appointment successfully deleted!");
     }
 
-//    @GetMapping("/findByAuthor/{email}")
-//    public ResponseEntity<?> findAppointmentsByAuthor(@PathVariable final String email){
-//        if(StringUtils.isBlank(email))
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
-//
-//        final UserRequest userRequest = userService.findUser(email);
-//        if(userRequest == null)
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find Appointment, User doesn't exist!");
-//
-//        List<Appointment> appointments = appointmentService.findByAuthor(userRequest);
-//        if(appointments != null && !appointments.isEmpty())
-//            return ResponseEntity.ok(appointments);
-//        return ResponseEntity.ok("User has no Appointments");
-//    }
+    /*
+TODO
+    @GetMapping("/findByAuthor/{email}")
+    public ResponseEntity<?> findAppointmentsByAuthor(@PathVariable final String email){
+        if(StringUtils.isBlank(email))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
+
+        final UserRequest userRequest = userService.findUser(email);
+        if(userRequest == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find Appointment, User doesn't exist!");
+
+        List<Appointment> appointments = appointmentService.findByAuthor(userRequest);
+        if(appointments != null && !appointments.isEmpty())
+            return ResponseEntity.ok(appointments);
+        return ResponseEntity.ok("User has no Appointments");
+    }
+*/
 }

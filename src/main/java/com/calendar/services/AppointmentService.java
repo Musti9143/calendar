@@ -46,4 +46,10 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
     }
 
+    //TODO
+//    public List<Appointment> findByAuthor(final UserDTO authorDto) {
+//        User author = new User();
+//        return appointmentRepository.findByAuthor(author);
+//    }
+
 }
