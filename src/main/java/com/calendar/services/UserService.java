@@ -8,8 +8,6 @@ import com.calendar.repositories.IUserRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class UserService {
 

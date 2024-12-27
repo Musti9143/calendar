@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @Entity(name = "user")
-public class User implements Serializable{
+public class User implements Serializable {
 
     @Id
     @JsonIgnore

@@ -19,7 +19,7 @@ class UserRequestTest {
             "Max, Muster, Mäx.Müster@emäil.com, true"
     })
     @ParameterizedTest
-    void isValid_shouldReturnValidResult(String name, String surname, String email, boolean expected){
+    void isValid_shouldReturnValidResult(String name, String surname, String email, boolean expected) {
         UserRequest userRequest = new UserRequest(name, surname, email);
         assertEquals(expected, userRequest.isValid());
     }

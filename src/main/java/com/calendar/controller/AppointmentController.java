@@ -25,7 +25,7 @@ public class AppointmentController {
     @PostMapping("/create")
     public ResponseEntity<String> createAppointment(@RequestBody final AppointmentRequest appointmentRequest) {
         final String email = appointmentRequest.author();
-        if(StringUtils.isBlank(email))
+        if (StringUtils.isBlank(email))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
 
         return appointmentService.create(appointmentRequest);
