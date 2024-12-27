@@ -5,6 +5,7 @@ import com.calendar.communication.out.UserResponse;
 import com.calendar.entities.User;
 import com.calendar.mapper.UserMapper;
 import com.calendar.repositories.IUserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,22 +27,32 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
+    private UserRequest userRequest;
+    private User user;
+    private UserResponse userResponse;
+
+    @BeforeEach
+    void setUp() {
+
+        userRequest = new UserRequest("Max", "Power", "max.power@email.com");
+        user = new User("Max", "Power", "max.power@email.com");
+        userResponse = new UserResponse("Max", "Power", "max.power@email.com");
+    }
+
     @Test
     void create_shouldReturnTrue_whenUserDoesNotExist() {
-        final UserRequest userRequest = new UserRequest("Max", "Power", "max.power@email.com");
-        final User user = new User("Max", "Power", "max.power@email.com");
 
         when(userMapper.toUser(userRequest)).thenReturn(user);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
 
-        assertTrue(userService.create(userRequest));
+        boolean result = userService.create(userRequest);
+
+        assertTrue(result);
         verify(userRepository, times(1)).save(user);
     }
 
     @Test
     void create_shouldReturnFalse_whenUserAlreadyExists() {
-        final UserRequest userRequest = new UserRequest("Max", "Power", "max.power@email.com");
-        final User user = new User("Max", "Power", "max.power@email.com");
 
         when(userMapper.toUser(userRequest)).thenReturn(user);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
@@ -52,7 +63,6 @@ class UserServiceTest {
 
     @Test
     void delete_shouldReturnFalse_whenUserDoesNotExist() {
-        final User user = new User("Max", "Power", "max.power@email.com");
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
 
@@ -62,7 +72,6 @@ class UserServiceTest {
 
     @Test
     void delete_shouldReturnTrue_whenUserExist() {
-        final User user = new User("Max", "Power", "max.power@email.com");
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -72,7 +81,6 @@ class UserServiceTest {
 
     @Test
     void update_shouldReturnNull_whenUserDoesNotExist() {
-        final UserRequest userRequest = new UserRequest("Max", "Power", "max.power@email.com");
 
         when(userRepository.findByEmail(userRequest.email())).thenReturn(null);
 
@@ -84,7 +92,25 @@ class UserServiceTest {
     }
 
     @Test
+    void update_shouldReturnUserResponse_whenUserIsUpdated() {
+
+        when(userRepository.findByEmail(userRequest.email())).thenReturn(user);
+        when(userMapper.toUserResponse(user)).thenReturn(userResponse);
+
+        UserResponse result = userService.update(userRequest);
+
+        assertNotNull(result);
+        assertEquals(userRequest.name(), result.name());
+        assertEquals(userRequest.surname(), result.surname());
+
+        verify(userRepository, times(1)).findByEmail(userRequest.email());
+        verify(userRepository, times(1)).save(user);
+        verify(userMapper, times(1)).toUserResponse(user);
+    }
+
+    @Test
     void findUser_shouldReturnNull_WhenUserNotFound() {
+
         when(userRepository.findByEmail("max.power@email.com")).thenReturn(null);
 
         UserResponse result = userService.findUser("max.power@email.com");
@@ -98,8 +124,6 @@ class UserServiceTest {
 
     @Test
     void findUser_shouldReturnUserResponse_WhenUserIsFound() {
-        final User user = new User("Max", "Power", "max.power@email.com");
-        final UserResponse userResponse = new UserResponse("Max", "Power", "max.power@email.com");
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
         when(userMapper.toUserResponse(user)).thenReturn(userResponse);
