@@ -12,7 +12,11 @@ class UserRequestTest {
             "'', Muster, Max.Muster@email.com, false",
             "Max, '', Max.Muster@email.com, false",
             "Max, Muster, '', false",
-            "Max, Muster, Max.Musteremail.com, false"
+            "Max, Muster, Max.Musteremail.com, false",
+            "Max, Muster, Max..Muster@email.com, false",
+            "Max, Muster, Max.Muster.@email.com, false",
+            "Max, Muster, Max.Muster@.email.com, false",
+            "Max, Muster, Mäx.Müster@emäil.com, true"
     })
     @ParameterizedTest
     void isValid_shouldReturnValidResult(String name, String surname, String email, boolean expected){
