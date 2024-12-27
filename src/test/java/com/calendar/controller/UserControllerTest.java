@@ -24,7 +24,7 @@ class UserControllerTest {
     private UserRequest userRequest;
 
     @InjectMocks
-    private UserController userController_subjectUnderTest;
+    private UserController userController;
 
     @Test
     void createUser_shouldReturnOk_whenUserIsCreated(){
@@ -32,7 +32,7 @@ class UserControllerTest {
         when(userRequest.isValid()).thenReturn(true);
         when(userService.create(userRequest)).thenReturn(true);
 
-        ResponseEntity<String> responseEntity = userController_subjectUnderTest.createUser(userRequest);
+        ResponseEntity<String> responseEntity = userController.createUser(userRequest);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("Successfully created!", responseEntity.getBody());
@@ -44,7 +44,7 @@ class UserControllerTest {
 
         when(userRequest.isValid()).thenReturn(false);
 
-        ResponseEntity<String> responseEntity = userController_subjectUnderTest.createUser(userRequest);
+        ResponseEntity<String> responseEntity = userController.createUser(userRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals("Something missing!", responseEntity.getBody());
@@ -57,7 +57,7 @@ class UserControllerTest {
         when(userRequest.isValid()).thenReturn(true);
         when(userService.create(userRequest)).thenReturn(false);
 
-        ResponseEntity<String> responseEntity = userController_subjectUnderTest.createUser(userRequest);
+        ResponseEntity<String> responseEntity = userController.createUser(userRequest);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("User already exists!", responseEntity.getBody());
@@ -73,7 +73,7 @@ class UserControllerTest {
 
         UserResponse result = userService.findUser("max.power@email.com");
 
-        ResponseEntity<?> responseEntity = userController_subjectUnderTest.findUser("max.power@email.com");
+        ResponseEntity<?> responseEntity = userController.findUser("max.power@email.com");
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(result, responseEntity.getBody());
@@ -84,7 +84,7 @@ class UserControllerTest {
 
         when(userService.findUser("max.power@email.com")).thenReturn(null);
 
-        ResponseEntity<?> responseEntity = userController_subjectUnderTest.findUser("max.power@email.com");
+        ResponseEntity<?> responseEntity = userController.findUser("max.power@email.com");
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals("User could not be found!", responseEntity.getBody());
@@ -94,7 +94,7 @@ class UserControllerTest {
     void deleteUser_shouldDeleteUser_whenUserExistInRepo(){
 
         when(userService.delete("max.power@email.com")).thenReturn(true);
-        ResponseEntity<String> responseEntity = userController_subjectUnderTest.deleteUser("max.power@email.com");
+        ResponseEntity<String> responseEntity = userController.deleteUser("max.power@email.com");
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("Successfully deleted {max.power@email.com}", responseEntity.getBody());
@@ -105,7 +105,7 @@ class UserControllerTest {
     void deleteUser_shouldNotDeleteUser_whenUserDoesNotExistInRepo(){
 
         when(userService.delete("max.power@email.com")).thenReturn(false);
-        ResponseEntity<String> responseEntity = userController_subjectUnderTest.deleteUser("max.power@email.com");
+        ResponseEntity<String> responseEntity = userController.deleteUser("max.power@email.com");
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("User with given Email does not exist!", responseEntity.getBody());
