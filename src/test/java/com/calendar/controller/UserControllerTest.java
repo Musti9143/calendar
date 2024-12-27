@@ -2,7 +2,6 @@ package com.calendar.controller;
 
 import com.calendar.communication.in.UserRequest;
 import com.calendar.communication.out.UserResponse;
-import com.calendar.entities.User;
 import com.calendar.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +61,6 @@ class UserControllerTest {
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("User already exists!", responseEntity.getBody());
-
         verify(userService, times(1)).create(userRequest);
     }
 
