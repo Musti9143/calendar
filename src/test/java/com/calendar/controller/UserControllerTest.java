@@ -64,6 +64,51 @@ class UserControllerTest {
         verify(userService, times(1)).create(userRequest);
     }
 
+
+    @Test
+    void updateUser_shouldReturnBadRequest_whenUserIsInvalid() {
+
+        when(userRequest.isValid()).thenReturn(false);
+
+        ResponseEntity<String> responseEntity = userController.createUser(userRequest);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals("Something missing!", responseEntity.getBody());
+        verify(userService, never()).create(userRequest);
+    }
+
+    @Test
+    void updateUser_shouldReturnOk_whenUserIsUpdated() {
+
+        when(userRequest.isValid()).thenReturn(true);
+
+        final UserResponse userResponse = new UserResponse("Max", "Power", "max.power@email.com");
+
+        when(userService.update(userRequest)).thenReturn(userResponse);
+
+        ResponseEntity<?> responseEntity = userController.updateUser(userRequest);
+
+        assertEquals(userResponse, responseEntity.getBody());
+        verify(userService, times(1)).update(userRequest);
+
+    }
+
+    //TODO
+    @Test
+    void updateUser_shouldReturnNotFound_whenUserIsNotFound() {
+
+        when(userRequest.isValid()).thenReturn(true);
+
+        final UserResponse userResponse = new UserResponse("Max", "Power", "max.power@email.com");
+
+        ResponseEntity<String> responseEntity = userController.createUser(userRequest);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals("User could not be found!", userService.update(userResponse));
+        verify(userService, never()).create(userRequest);
+
+    }
+
     @Test
     void findUser_shouldReturnUserResponse_whenUserResponseIsNotNull(){
 
@@ -111,4 +156,5 @@ class UserControllerTest {
         assertEquals("User with given Email does not exist!", responseEntity.getBody());
         verify(userService, times(1)).delete("max.power@email.com");
     }
+
 }

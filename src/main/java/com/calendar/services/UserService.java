@@ -5,6 +5,7 @@ import com.calendar.communication.out.UserResponse;
 import com.calendar.entities.User;
 import com.calendar.mapper.UserMapper;
 import com.calendar.repositories.IUserRepository;
+import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -15,12 +16,12 @@ public class UserService {
     private final IUserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserService(final IUserRepository userRepository, final UserMapper userMapper) {
+    public UserService(@Nonnull final IUserRepository userRepository, @Nonnull final UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
 
-    public boolean create(final UserRequest userRequest) {
+    public boolean create(@Nonnull final UserRequest userRequest) {
         final User user = userMapper.toUser(userRequest);
 
         if (userRepository.findByEmail(user.getEmail()) == null) {
@@ -30,7 +31,7 @@ public class UserService {
         return false;
     }
 
-    public boolean delete(final String email) {
+    public boolean delete(@Nonnull final String email) {
 
         final User user = userRepository.findByEmail(email);
         if (user == null)
@@ -39,17 +40,21 @@ public class UserService {
         return true;
     }
 
-    public void deleteById(final UUID id) {
+    public UserResponse update(@Nonnull final UserRequest userRequest) {
 
-        userRepository.deleteById(id);
-    }
+        final User user = userRepository.findByEmail(userRequest.email());
+        if (user == null)
+            return null;
 
-    public void update(final User user) {
+        user.setName(userRequest.name());
+        user.setSurname(userRequest.surname());
 
         userRepository.save(user);
+
+        return userMapper.toUserResponse(user);
     }
 
-    public UserResponse findUser(final String email) {
+    public UserResponse findUser(@Nonnull final String email) {
 
         final User user = userRepository.findByEmail(email);
         if (user == null)
