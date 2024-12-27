@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +29,7 @@ class UserControllerTest {
     final UserResponse userResponse = new UserResponse("Max", "Power", "max.power@email.com");
 
     @Test
-    void createUser_shouldReturnOk_whenUserIsCreated(){
+    void createUser_shouldReturnOk_whenUserIsCreated() {
 
         when(userRequest.isValid()).thenReturn(true);
         when(userService.create(userRequest)).thenReturn(true);
@@ -42,7 +42,7 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser_shouldReturnBadRequest_whenRequestIsInvalid(){
+    void createUser_shouldReturnBadRequest_whenRequestIsInvalid() {
 
         when(userRequest.isValid()).thenReturn(false);
 
@@ -54,7 +54,7 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser_shouldReturnOk_whenUserAlreadyExists(){
+    void createUser_shouldReturnOk_whenUserAlreadyExists() {
 
         when(userRequest.isValid()).thenReturn(true);
         when(userService.create(userRequest)).thenReturn(false);
@@ -67,7 +67,7 @@ class UserControllerTest {
     }
 
     @Test
-    void findUser_shouldReturnUserResponse_whenUserResponseIsNotNull(){
+    void findUser_shouldReturnUserResponse_whenUserResponseIsNotNull() {
 
         when(userService.findUser("max.power@email.com")).thenReturn(userResponse);
 
@@ -80,7 +80,7 @@ class UserControllerTest {
     }
 
     @Test
-    void findUser_shouldReturnNotFound_whenUserResponseIsNull(){
+    void findUser_shouldReturnNotFound_whenUserResponseIsNull() {
 
         when(userService.findUser("max.power@email.com")).thenReturn(null);
 
@@ -91,7 +91,7 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteUser_shouldDeleteUser_whenUserExistInRepo(){
+    void deleteUser_shouldDeleteUser_whenUserExistInRepo() {
 
         when(userService.delete("max.power@email.com")).thenReturn(true);
         ResponseEntity<String> responseEntity = userController.deleteUser("max.power@email.com");
@@ -102,7 +102,7 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteUser_shouldNotDeleteUser_whenUserDoesNotExistInRepo(){
+    void deleteUser_shouldNotDeleteUser_whenUserDoesNotExistInRepo() {
 
         when(userService.delete("max.power@email.com")).thenReturn(false);
         ResponseEntity<String> responseEntity = userController.deleteUser("max.power@email.com");

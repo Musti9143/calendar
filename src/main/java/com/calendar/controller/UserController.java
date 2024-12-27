@@ -30,10 +30,10 @@ public class UserController {
     }
 
     @GetMapping("/findUser/{email}")
-    public ResponseEntity<?> findUser(@PathVariable final String email){
+    public ResponseEntity<?> findUser(@PathVariable final String email) {
 
         final UserResponse userResponse = userService.findUser(email);
-        if(userResponse != null)
+        if (userResponse != null)
             return ResponseEntity.ok(userResponse);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User could not be found!");
     }
@@ -53,7 +53,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something missing!");
 
         final UserResponse userResponse = userService.update(userRequest);
-        if(userResponse != null)
+        if (userResponse != null)
             return ResponseEntity.ok(userResponse);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User could not be found!");
 

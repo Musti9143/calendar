@@ -183,14 +183,15 @@ public class RequestResponseLoggingFilter implements Filter {
     }
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        private record RequestLogData(String requestId, String method, String requestUri, Object requestBody) {
+    private record RequestLogData(String requestId, String method, String requestUri, Object requestBody) {
     }
 
     private record ResponseLog(ResponseLogData responseLogData) {
     }
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private record ResponseLogData(String responseToRequestId, @JsonIgnore long duration, Integer responseStatus, Object responseBody) {
+    private record ResponseLogData(String responseToRequestId, @JsonIgnore long duration, Integer responseStatus,
+                                   Object responseBody) {
         @JsonProperty("duration")
         public String getFormattedDuration() {
             if (duration < 1000) {

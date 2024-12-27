@@ -26,7 +26,7 @@ public class AppointmentService {
 
     public ResponseEntity<String> create(final AppointmentRequest appointmentRequest) {
         final User user = userRepository.findByEmail(appointmentRequest.author());
-        if(user == null)
+        if (user == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot create Appointment, User could not be found!");
 
         Appointment appointment = appointmentMapper.toAppointment(appointmentRequest, user);
