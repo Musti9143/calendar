@@ -45,4 +45,18 @@ public class UserController {
             return ResponseEntity.ok("Successfully deleted {" + email + "}");
         return ResponseEntity.ok("User with given Email does not exist!");
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestBody final UserRequest userRequest) {
+
+        if (!userRequest.isValid())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something missing!");
+
+        final UserResponse userResponse = userService.update(userRequest);
+        if(userResponse != null)
+            return ResponseEntity.ok(userResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User could not be found!");
+
+    }
+
 }

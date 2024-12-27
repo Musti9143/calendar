@@ -26,6 +26,8 @@ class UserControllerTest {
     @InjectMocks
     private UserController userController;
 
+    final UserResponse userResponse = new UserResponse("Max", "Power", "max.power@email.com");
+
     @Test
     void createUser_shouldReturnOk_whenUserIsCreated(){
 
@@ -66,8 +68,6 @@ class UserControllerTest {
 
     @Test
     void findUser_shouldReturnUserResponse_whenUserResponseIsNotNull(){
-
-        final UserResponse userResponse = new UserResponse("Max", "Power", "max.power@email.com");
 
         when(userService.findUser("max.power@email.com")).thenReturn(userResponse);
 
@@ -110,5 +110,44 @@ class UserControllerTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("User with given Email does not exist!", responseEntity.getBody());
         verify(userService, times(1)).delete("max.power@email.com");
+    }
+
+    @Test
+    void updateUser_shouldReturnBadRequest_whenUserIsInvalid() {
+
+        when(userRequest.isValid()).thenReturn(false);
+
+        ResponseEntity<?> responseEntity = userController.updateUser(userRequest);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals("Something missing!", responseEntity.getBody());
+        verify(userService, never()).update(userRequest);
+    }
+
+    @Test
+    void updateUser_shouldReturnOk_whenUserIsUpdated() {
+
+        when(userRequest.isValid()).thenReturn(true);
+        when(userService.update(userRequest)).thenReturn(userResponse);
+
+        ResponseEntity<?> responseEntity = userController.updateUser(userRequest);
+
+        assertEquals(userResponse, responseEntity.getBody());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        verify(userService, times(1)).update(userRequest);
+
+    }
+
+    @Test
+    void updateUser_shouldReturnNotFound_whenUserDoesNotExist() {
+
+        when(userRequest.isValid()).thenReturn(true);
+        when(userService.update(userRequest)).thenReturn(null);
+
+        ResponseEntity<?> responseEntity = userController.updateUser(userRequest);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals("User could not be found!", responseEntity.getBody());
+        verify(userService, times(1)).update(userRequest);
     }
 }
