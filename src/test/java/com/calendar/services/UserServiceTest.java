@@ -71,6 +71,19 @@ class UserServiceTest {
     }
 
     @Test
+    void update_shouldReturnNull_whenUserDoesNotExist() {
+        final UserRequest userRequest = new UserRequest("Max", "Power", "max.power@email.com");
+
+        when(userRepository.findByEmail(userRequest.email())).thenReturn(null);
+
+        assertNull(userService.update(userRequest));
+
+        verify(userRepository, times(1)).findByEmail(userRequest.email());
+        verify(userRepository, never()).save(any());
+        verify(userMapper, never()).toUserResponse(any());
+    }
+
+    @Test
     void findUser_shouldReturnNull_WhenUserNotFound() {
         when(userRepository.findByEmail("max.power@email.com")).thenReturn(null);
 
