@@ -2,6 +2,7 @@ package com.calendar.controller;
 
 import com.calendar.communication.in.UserRequest;
 import com.calendar.communication.out.UserResponse;
+import com.calendar.entities.User;
 import com.calendar.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,14 +24,11 @@ class UserControllerTest {
     @Mock
     private UserRequest userRequest;
 
-    @Mock
-    private UserResponse userResponse;
-
     @InjectMocks
     private UserController userController_subjectUnderTest;
 
     @Test
-    void createUser_shouldCreateUserAndVerify_whenUserDoesNotExist(){
+    void createUser_shouldReturnOk_whenUserIsCreated(){
 
         when(userRequest.isValid()).thenReturn(true);
         when(userService.create(userRequest)).thenReturn(true);
@@ -43,7 +41,7 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser_shouldNotCreateUser_whenUserRequestIsInvalid(){
+    void createUser_shouldReturnBadRequest_whenRequestIsInvalid(){
 
         when(userRequest.isValid()).thenReturn(false);
 
@@ -55,7 +53,7 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser_shouldNotCreateUser_whenUserAlreadyExist(){
+    void createUser_shouldReturnOk_whenUserAlreadyExists(){
 
         when(userRequest.isValid()).thenReturn(true);
         when(userService.create(userRequest)).thenReturn(false);
@@ -70,6 +68,8 @@ class UserControllerTest {
 
     @Test
     void findUser_shouldReturnUserResponse_whenUserResponseIsNotNull(){
+
+        final UserResponse userResponse = new UserResponse("Max", "Power", "max.power@email.com");
 
         when(userService.findUser("max.power@email.com")).thenReturn(userResponse);
 
@@ -87,10 +87,8 @@ class UserControllerTest {
         when(userService.findUser("max.power@email.com")).thenReturn(null);
 
         ResponseEntity<?> responseEntity = userController_subjectUnderTest.findUser("max.power@email.com");
-        UserResponse result = userService.findUser("max.power@email.com");
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertNull(result);
         assertEquals("User could not be found!", responseEntity.getBody());
     }
 
