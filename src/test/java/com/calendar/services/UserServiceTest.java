@@ -27,7 +27,7 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    void create_shouldReturnTrueAndVerifySave_whenUserDoesNotExist() {
+    void create_shouldReturnTrue_whenUserDoesNotExist() {
         final UserRequest userRequest = new UserRequest("Max", "Power", "max.power@email.com");
         final User user = new User("Max", "Power", "max.power@email.com");
 
@@ -61,7 +61,7 @@ class UserServiceTest {
     }
 
     @Test
-    void delete_shouldReturnTrueAndVerifyDelete_whenUserExist() {
+    void delete_shouldReturnTrue_whenUserExist() {
         final User user = new User("Max", "Power", "max.power@email.com");
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
