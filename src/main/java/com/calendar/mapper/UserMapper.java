@@ -1,22 +1,18 @@
 package com.calendar.mapper;
 
-import com.calendar.entities.User;
 import com.calendar.communication.in.UserRequest;
-import com.calendar.dto.UserDTO;
+import com.calendar.communication.out.UserResponse;
+import com.calendar.entities.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
 
-    public UserDTO toUserDto(final UserRequest request) {
-        return new UserDTO(request.name(), request.surname(), request.email());
+    public User toUser(UserRequest userRequest) {
+        return new User(userRequest.name(), userRequest.surname(), userRequest.email());
     }
 
-    public UserDTO toUserDto(final User user) {
-        return new UserDTO(user.getName(), user.getSurname(), user.getEmail());
-    }
-
-    public User toUser(final UserDTO userDTO) {
-        return new User(userDTO.name(), userDTO.surname(), userDTO.email());
+    public UserResponse toUserResponse(User user) {
+        return new UserResponse(user.getName(), user.getSurname(), user.getEmail());
     }
 }

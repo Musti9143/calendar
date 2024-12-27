@@ -1,47 +1,31 @@
 package com.calendar.mapper;
 
 import com.calendar.communication.in.UserRequest;
-import com.calendar.dto.UserDTO;
+import com.calendar.communication.out.UserResponse;
 import com.calendar.entities.User;
-import com.calendar.mapper.UserMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserMapperTest {
 
-    private UserMapper userMapper;
-    private UserDTO userDTO;
-    private User user;
-
-    @BeforeEach
-    void setup(){
-        userMapper = new UserMapper();
-    }
+    private final UserMapper userMapper = new UserMapper();
 
     @Test
-    void toUserDto_shouldMapUserRequestToUserDTO(){
-        UserRequest userRequest = new UserRequest("Max", "Mustermann", "Max.Mustermann@email.com");
-        UserDTO userDTO = userMapper.toUserDto(userRequest);
-        assertEquals(userRequest.name(),userDTO.name());
-        assertEquals(userRequest.surname(),userDTO.surname());
-        assertEquals(userRequest.email(),userDTO.email());
+    void toUser_shouldMapUserRequestToUser() {
+        final UserRequest userRequest = new UserRequest("Max", "Mustermann", "Max.Mustermann@email.com");
+        final User user = userMapper.toUser(userRequest);
+        assertEquals(userRequest.name(), user.getName());
+        assertEquals(userRequest.surname(), user.getSurname());
+        assertEquals(userRequest.email(), user.getEmail());
     }
+
     @Test
-    void toUserDto_shouldMapUserToUserDTO(){
-        User user = new User("Max", "Mustermann", "Max.Mustermann@email.com");
-        UserDTO userDTO = userMapper.toUserDto(user);
-        assertEquals(user.getName(),userDTO.name());
-        assertEquals(user.getSurname(),userDTO.surname());
-        assertEquals(user.getEmail(),userDTO.email());
-    }
-    @Test
-    void toUser_shouldMapUserDTOToUser(){
-        UserDTO userDTO = new UserDTO("Max", "Mustermann", "Max.Mustermann@email.com");
-        User user = userMapper.toUser(userDTO);
-        assertEquals(user.getName(),userDTO.name());
-        assertEquals(user.getSurname(),userDTO.surname());
-        assertEquals(user.getEmail(),userDTO.email());
+    void toUserResponse_shouldMapUserToUserResponse() {
+        final User user = new User("Max", "Mustermann", "Max.Mustermann@email.com");
+        final UserResponse userResponse = userMapper.toUserResponse(user);
+        assertEquals(user.getName(), userResponse.name());
+        assertEquals(user.getSurname(), userResponse.surname());
+        assertEquals(user.getEmail(), userResponse.email());
     }
 }

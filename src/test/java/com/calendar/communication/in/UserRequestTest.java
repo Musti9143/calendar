@@ -1,6 +1,5 @@
 package com.calendar.communication.in;
 
-import com.calendar.communication.in.UserRequest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -13,7 +12,11 @@ class UserRequestTest {
             "'', Muster, Max.Muster@email.com, false",
             "Max, '', Max.Muster@email.com, false",
             "Max, Muster, '', false",
-            "Max, Muster, Max.Musteremail.com, false"
+            "Max, Muster, Max.Musteremail.com, false",
+            "Max, Muster, Max..Muster@email.com, false",
+            "Max, Muster, Max.Muster.@email.com, false",
+            "Max, Muster, Max.Muster@.email.com, false",
+            "Max, Muster, Mäx.Müster@emäil.com, true"
     })
     @ParameterizedTest
     void isValid_shouldReturnValidResult(String name, String surname, String email, boolean expected){
