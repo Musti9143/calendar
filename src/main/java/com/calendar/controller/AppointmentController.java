@@ -25,8 +25,13 @@ public class AppointmentController {
     @PostMapping("/create")
     public ResponseEntity<String> createAppointment(@RequestBody final AppointmentRequest appointmentRequest) {
         final String email = appointmentRequest.author();
+        final String title = appointmentRequest.title();
         if (StringUtils.isBlank(email))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required!");
+        else if (StringUtils.isBlank(title))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Title is required!");
+        else if (!appointmentRequest.isValid())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date missing or End Date is before Start Date!");
 
         return appointmentService.create(appointmentRequest);
     }
