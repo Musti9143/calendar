@@ -43,7 +43,7 @@ public class UserController {
 
         if (userService.delete(email))
             return ResponseEntity.ok("Successfully deleted {" + email + "}");
-        return ResponseEntity.ok("User with given Email does not exist!");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with given Email does not exist!");
     }
 
     @PutMapping("/update")

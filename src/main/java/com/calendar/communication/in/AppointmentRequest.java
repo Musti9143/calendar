@@ -1,18 +1,17 @@
 package com.calendar.communication.in;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import org.apache.commons.lang3.StringUtils;
 
-public record AppointmentRequest(String title, String author, Timestamp startDateTime, Timestamp endDateTime,
+import java.sql.Timestamp;
+
+public record AppointmentRequest(String title, String email, Timestamp startDateTime, Timestamp endDateTime,
                                  String description) {
     public boolean isValid() {
+        //TODO : check startdate and enddate are not in past
 
-        LocalDateTime now = LocalDateTime.now();
-
-        if (this.title == null || this.title.isEmpty() || this.author == null || this.author.isEmpty()) {
-            return false;
-        }
-        return this.startDateTime != null && this.endDateTime != null && this.startDateTime.before(this.endDateTime) &&
-                this.startDateTime.after(Timestamp.valueOf(now));
+        return StringUtils.isNotBlank(this.title) &&
+                StringUtils.isNotBlank(this.email) &&
+                (this.startDateTime != null) &&
+                (this.endDateTime != null);
     }
 }

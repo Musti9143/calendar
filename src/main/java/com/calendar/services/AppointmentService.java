@@ -6,10 +6,10 @@ import com.calendar.entities.User;
 import com.calendar.mapper.AppointmentMapper;
 import com.calendar.repositories.IAppointmentRepository;
 import com.calendar.repositories.IUserRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -18,38 +18,44 @@ public class AppointmentService {
     private final AppointmentMapper appointmentMapper;
     private final IUserRepository userRepository;
 
-    public AppointmentService(final IAppointmentRepository appointmentRepository, final AppointmentMapper appointmentMapper, final IUserRepository userRepository) {
+    public AppointmentService(final IAppointmentRepository appointmentRepository, final AppointmentMapper appointmentMapper,
+                              final IUserRepository userRepository) {
         this.appointmentRepository = appointmentRepository;
         this.appointmentMapper = appointmentMapper;
         this.userRepository = userRepository;
     }
 
-    public ResponseEntity<String> create(final AppointmentRequest appointmentRequest) {
-        final User user = userRepository.findByEmail(appointmentRequest.author());
+    public boolean create(final AppointmentRequest appointmentRequest) {
+
+        final User user = userRepository.findByEmail(appointmentRequest.email());
         if (user == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot create Appointment, User could not be found!");
+            return false;
 
         Appointment appointment = appointmentMapper.toAppointment(appointmentRequest, user);
         appointmentRepository.save(appointment);
-        return ResponseEntity.ok("Appointment successfully created!");
+        return true;
     }
 
-    public void delete(final Appointment appointment) {
-        appointmentRepository.delete(appointment);
-    }
+    public boolean deleteById(final UUID id) {
 
-    public void deleteById(final UUID id) {
+        final Optional<Appointment> appointment = appointmentRepository.findById(id);
+        if (appointment.isEmpty())
+            return false;
         appointmentRepository.deleteById(id);
+        return true;
     }
 
     public void update(final Appointment appointment) {
+
         appointmentRepository.save(appointment);
     }
 
-    //TODO
-//    public List<Appointment> findByAuthor(final UserDTO authorDto) {
-//        User author = new User();
-//        return appointmentRepository.findByAuthor(author);
-//    }
+    public List<Appointment> findByAuthor(final String email) {
 
+        User user = userRepository.findByEmail(email);
+
+        if (user == null)
+            return null;
+        return appointmentRepository.findByAuthor(user);
+    }
 }
