@@ -40,14 +40,14 @@ public class AppointmentController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment does not exist!");
     }
 
-
     @GetMapping("/findByAuthor/{email}")
     public ResponseEntity<?> findAppointmentsByAuthor(@PathVariable final String email) {
 
         List<Appointment> appointments = appointmentService.findByAuthor(email);
 
         if (appointments == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find Appointments, because User could not be found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find Appointments, because User could " +
+                    "not be found!");
         else if (appointments.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find any Appointments!");
         return ResponseEntity.ok(appointments);
