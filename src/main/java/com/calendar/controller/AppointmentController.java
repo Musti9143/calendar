@@ -24,7 +24,8 @@ public class AppointmentController {
     public ResponseEntity<String> createAppointment(@RequestBody final AppointmentRequest appointmentRequest) {
 
         if (!appointmentRequest.isValid())
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Title, Email, Date missing or End Date is before Start Date!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Title, Email, Date missing or End Date is " +
+                    "before Start Date!");
 
         if (appointmentService.create(appointmentRequest))
             return ResponseEntity.ok("Appointment successfully created!");
@@ -50,5 +51,17 @@ public class AppointmentController {
         else if (appointments.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find any Appointments!");
         return ResponseEntity.ok(appointments);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateAppointment(@RequestBody final AppointmentRequest appointmentRequest) {
+
+        if (!appointmentRequest.isValid(appointmentRequest.id()))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Title, Email, Date or ID is missing or " +
+                    "End Date is before Start Date!");
+
+        if (appointmentService.update(appointmentRequest))
+            return ResponseEntity.ok("Appointment successfully updated!");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Appointments found for the given Author!");
     }
 }

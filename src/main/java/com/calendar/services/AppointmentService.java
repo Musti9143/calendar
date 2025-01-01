@@ -6,6 +6,7 @@ import com.calendar.entities.User;
 import com.calendar.mapper.AppointmentMapper;
 import com.calendar.repositories.IAppointmentRepository;
 import com.calendar.repositories.IUserRepository;
+import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,11 +46,26 @@ public class AppointmentService {
         return true;
     }
 
-    public void update(final Appointment appointment) {
+    public boolean update(final AppointmentRequest appointmentRequest) {
+
+        //Get optionalAppointment from repo
+        final Optional<Appointment> optionalAppointment = appointmentRepository.findById(UUID.fromString(appointmentRequest.id()));
+
+        // check if present and same author
+        if (optionalAppointment.isEmpty() || !appointmentRequest.email().equals(optionalAppointment.get().getAuthor().getEmail()))
+            return false;
+
+        Appointment appointment = optionalAppointment.get();
+        appointment.setTitle(appointmentRequest.title());
+        appointment.setDescription(appointmentRequest.description());
+        appointment.setStartDateTime(appointmentRequest.startDateTime());
+        appointment.setEndDateTime(appointmentRequest.endDateTime());
 
         appointmentRepository.save(appointment);
+        return true;
     }
 
+    @Nullable
     public List<Appointment> findByAuthor(final String email) {
 
         User user = userRepository.findByEmail(email);
