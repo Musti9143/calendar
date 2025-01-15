@@ -117,15 +117,14 @@ class AppointmentControllerTest {
     }
 
     @Test
-    void findAppointmentsByAuthor_shouldReturnListOfAppointments_whenFoundByAuthor() {
+    void findAppointmentsByAuthor_shouldReturnListOfAppointments_whenAppointmentOfAuthorFound() {
 
         appointments.add(appointment);
         when(appointmentService.findByAuthor(user.getEmail())).thenReturn(appointments);
 
         List<Appointment> result = appointmentService.findByAuthor(user.getEmail());
 
-        ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(
-                user.getEmail());
+        ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(user.getEmail());
 
         assertNotNull(result);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -138,8 +137,7 @@ class AppointmentControllerTest {
 
         when(appointmentService.findByAuthor(user.getEmail())).thenReturn(null);
 
-        ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(
-                user.getEmail());
+        ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(user.getEmail());
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals("Cannot find Appointments, because User could not be found!",
@@ -152,11 +150,52 @@ class AppointmentControllerTest {
 
         when(appointmentService.findByAuthor(user.getEmail())).thenReturn(appointments);
 
-        ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(
-                user.getEmail());
+        ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(user.getEmail());
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals("Could not find any Appointments!", responseEntity.getBody());
         verify(appointmentService, times(1)).findByAuthor(user.getEmail());
+    }
+
+    @Test
+    void updateAppointment_shouldReturnOk_whenAppointmentIsUpdated() {
+
+        when(appointmentRequest.isValid(appointmentRequest.id())).thenReturn(true);
+        when(appointmentService.update(appointmentRequest)).thenReturn(true);
+
+        ResponseEntity<?> responseEntity = appointmentController.updateAppointment(appointmentRequest);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("Appointment successfully updated!", responseEntity.getBody());
+        verify(appointmentRequest, times(2)).isValid(appointmentRequest.id());
+        verify(appointmentService, times(1)).update(appointmentRequest);
+    }
+
+    @Test
+    void updateAppointment_shouldReturnBadRequest_whenAppointmentRequestIsInvalid() {
+
+        when(appointmentRequest.isValid(appointmentRequest.id())).thenReturn(false);
+
+        ResponseEntity<?> responseEntity = appointmentController.updateAppointment(appointmentRequest);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals("Title, Email, Date or ID is missing or End Date is before Start Date!",
+                responseEntity.getBody());
+        verify(appointmentRequest, times(2)).isValid(appointmentRequest.id());
+        verify(appointmentService, never()).update(appointmentRequest);
+    }
+
+    @Test
+    void updateAppointment_shouldReturnNotFound_whenAppointmentNotFoundForAuthor() {
+
+        when(appointmentRequest.isValid(appointmentRequest.id())).thenReturn(true);
+        when(appointmentService.update(appointmentRequest)).thenReturn(false);
+
+        ResponseEntity<?> responseEntity = appointmentController.updateAppointment(appointmentRequest);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals("No Appointments found for the given Author!", responseEntity.getBody());
+        verify(appointmentRequest, times(2)).isValid(appointmentRequest.id());
+        verify(appointmentService, times(1)).update(appointmentRequest);
     }
 }
