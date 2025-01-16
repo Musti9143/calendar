@@ -27,17 +27,17 @@ import static org.mockito.Mockito.*;
 class AppointmentControllerTest {
 
     @Mock
-    AppointmentService appointmentService;
+    private AppointmentService appointmentService;
 
     @Mock
-    AppointmentRequest appointmentRequest;
+    private AppointmentRequest appointmentRequest;
 
     @InjectMocks
-    AppointmentController appointmentController;
+    private AppointmentController appointmentController;
 
-    List<Appointment> appointments;
-    User user;
-    Appointment appointment;
+    private List<Appointment> appointments;
+    private User user;
+    private Appointment appointment;
 
     @BeforeEach
     void setUp() {
