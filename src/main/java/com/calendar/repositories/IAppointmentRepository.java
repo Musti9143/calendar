@@ -11,5 +11,4 @@ import java.util.UUID;
 @Repository
 public interface IAppointmentRepository extends JpaRepository<Appointment, UUID> {
     List<Appointment> findByAuthor(final User author);
-
 }

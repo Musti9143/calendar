@@ -52,7 +52,7 @@ class UserServiceTest {
     }
 
     @Test
-    void create_shouldReturnFalse_whenUserAlreadyExists() {
+    void create_shouldReturnFalse_whenUserAlreadyExist() {
 
         when(userMapper.toUser(userRequest)).thenReturn(user);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
