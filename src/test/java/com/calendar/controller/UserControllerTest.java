@@ -107,7 +107,7 @@ class UserControllerTest {
         when(userService.delete("max.power@email.com")).thenReturn(false);
         ResponseEntity<String> responseEntity = userController.deleteUser("max.power@email.com");
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals("User with given Email does not exist!", responseEntity.getBody());
         verify(userService, times(1)).delete("max.power@email.com");
     }
