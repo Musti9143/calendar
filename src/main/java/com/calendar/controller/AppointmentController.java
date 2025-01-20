@@ -43,7 +43,7 @@ public class AppointmentController {
     @GetMapping("/findByAuthor/{email}")
     public ResponseEntity<?> findAppointmentsByAuthor(@PathVariable final String email) {
 
-        List<Appointment> appointments = appointmentService.findByAuthor(email);
+        List<Appointment> appointments = appointmentService.findByEmail(email);
 
         if (appointments == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find Appointments, because User could " +

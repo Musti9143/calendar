@@ -41,17 +41,19 @@ class AppointmentServiceTest {
     private Appointment appointment;
     private List<Appointment> appointments;
     private User user;
+    private static final String EMAIL = "max.power@email.com";
 
 
     @BeforeEach
     void setUp() {
         appointments = new ArrayList<>();
-        user = new User("Max", "Power", "max.power@email.com");
+        user = new User("Max", "Power", EMAIL);
         appointmentRequest = new AppointmentRequest("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27", "Title" ,
-                "max.power@email.com", Timestamp.valueOf("2014-01-01 00:00:00"),
+                EMAIL, Timestamp.valueOf("2014-01-01 00:00:00"),
                 Timestamp.valueOf("2014-01-01 00:00:00"), "description");
         appointment = new Appointment("Title", user, Timestamp.valueOf("2014-01-01 00:00:00"),
                 Timestamp.valueOf("2014-01-01 00:00:00"), "description");
+        appointments.add(appointment);
     }
 
     @Test
@@ -82,26 +84,99 @@ class AppointmentServiceTest {
     @Test
     void deleteById_shouldReturnTrue_whenAppointmentCouldBeDeleted() {
 
-        when(appointmentRepository.findById(UUID.fromString(appointmentRequest.id()))).thenReturn(Optional.ofNullable(appointment));
-        //when(Optional.ofNullable(appointment).isEmpty()).thenReturn(false);
+        when(appointmentRepository.findById(UUID.fromString(appointmentRequest.id()))).
+                thenReturn(Optional.ofNullable(appointment));
 
         boolean result = appointmentService.deleteById(UUID.fromString(appointmentRequest.id()));
 
         assertTrue(result);
-        verify(appointmentRepository, times(1)).deleteById(UUID.fromString(appointmentRequest.id()));
+        verify(appointmentRepository, times(1)).deleteById(UUID.
+                fromString(appointmentRequest.id()));
 
     }
 
     @Test
     void deleteById_shouldReturnFalse_whenAppointmentIdCouldNotBeFound() {
 
-        when(appointmentRepository.findById(UUID.fromString(appointmentRequest.id()))).thenReturn(Optional.ofNullable(appointment));
-        when(Optional.ofNullable(appointment).isEmpty()).thenReturn(true);
+        when(appointmentRepository.findById(UUID.fromString(appointmentRequest.id()))).
+                thenReturn(Optional.empty());
 
         boolean result = appointmentService.deleteById(UUID.fromString(appointmentRequest.id()));
 
         assertFalse(result);
         verify(appointmentRepository, never()).deleteById(UUID.fromString(appointmentRequest.id()));
 
+    }
+
+    @Test
+    void update_shouldReturnTrue_whenAppointmentIsUpdated() {
+
+        when(appointmentRepository.findById(UUID.fromString(appointmentRequest.id()))).
+                thenReturn(Optional.ofNullable(appointment));
+
+        boolean result = appointmentService.update(appointmentRequest);
+
+        assertTrue(result);
+        verify(appointmentRepository, times(1)).save(appointment);
+    }
+
+    @Test
+    void update_shouldReturnFalse_whenAppointmentCouldNotBeFound() {
+
+        when(appointmentRepository.findById(UUID.fromString(appointmentRequest.id()))).
+                thenReturn(Optional.empty());
+
+        boolean result = appointmentService.update(appointmentRequest);
+
+        assertFalse(result);
+        verify(appointmentRepository, never()).save(appointment);
+    }
+
+    @Test
+    void update_shouldReturnFalse_whenEmailDoesNotMatch() {
+
+        User diffrentUser = new User("Diffrent", "User", "email");
+        appointment.setAuthor(diffrentUser);
+        when(appointmentRepository.findById(UUID.fromString(appointmentRequest.id()))).
+                thenReturn(Optional.ofNullable(appointment));
+
+        boolean result = appointmentService.update(appointmentRequest);
+
+        assertFalse(result);
+        verify(appointmentRepository, never()).save(appointment);
+    }
+
+    @Test
+    void findByEmail_shouldReturnListOfAppointment_whenUserExists() {
+
+        // GIVEN
+        when(userRepository.findByEmail(EMAIL)).thenReturn(user);
+        when(appointmentRepository.findByAuthor(user)).thenReturn(appointments);
+
+        // WHEN
+        List<Appointment> result = appointmentService.findByEmail(EMAIL);
+
+        // THEN
+        assertNotNull(result);
+        assertEquals(result.get(0), appointments.get(0));
+
+        verify(userRepository, times(1)).findByEmail(EMAIL);
+        verify(appointmentRepository, times(1)).findByAuthor(user);
+    }
+
+    @Test
+    void findByEmail_shouldReturnNull_whenUserDoesNotExist() {
+
+        // GIVEN
+        when(userRepository.findByEmail(EMAIL)).thenReturn(null);
+
+        // WHEN
+        List<Appointment> result = appointmentService.findByEmail(EMAIL);
+
+        // THEN
+        assertNull(result);
+
+        verify(userRepository, times(1)).findByEmail(EMAIL);
+        verify(appointmentRepository, never()).findByAuthor(user);
     }
 }

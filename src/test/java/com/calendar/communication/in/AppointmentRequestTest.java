@@ -14,7 +14,15 @@ class AppointmentRequestTest {
 
             "'', Title, Max.Muster@email.com, 2024-12-20 00:51:00.000, " +
                     "2024-12-21 00:51:00.000, description, true",
+            "'', Title, Max.Muster@email.com, 2024-12-24 00:51:00.000, " +
+                    "2024-12-21 00:51:00.000, description, false",
+            "'', Title, Max.Muster@email.com, , " +
+                    "2024-12-21 00:51:00.000, description, false",
+            "'', Title, Max.Muster@email.com, 2024-12-20 00:51:00.000, " +
+                    ", description, false",
             "'', '', Max.Muster@email.com, 2024-12-20 00:51:00.000, " +
+                    "2024-12-21 00:51:00.000, description, false",
+            "'', Title, Max..Muster@email.com, 2024-12-20 00:51:00.000, " +
                     "2024-12-21 00:51:00.000, description, false",
             "'', Title, '', 2024-12-20 00:51:00.000, " +
                     "2024-12-21 00:51:00.000, description, false",

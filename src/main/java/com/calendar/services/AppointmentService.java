@@ -19,7 +19,8 @@ public class AppointmentService {
     private final AppointmentMapper appointmentMapper;
     private final IUserRepository userRepository;
 
-    public AppointmentService(final IAppointmentRepository appointmentRepository, final AppointmentMapper appointmentMapper,
+    public AppointmentService(final IAppointmentRepository appointmentRepository,
+                              final AppointmentMapper appointmentMapper,
                               final IUserRepository userRepository) {
         this.appointmentRepository = appointmentRepository;
         this.appointmentMapper = appointmentMapper;
@@ -49,10 +50,12 @@ public class AppointmentService {
     public boolean update(final AppointmentRequest appointmentRequest) {
 
         //Get optionalAppointment from repo
-        final Optional<Appointment> optionalAppointment = appointmentRepository.findById(UUID.fromString(appointmentRequest.id()));
+        final Optional<Appointment> optionalAppointment = appointmentRepository.findById(UUID.
+                fromString(appointmentRequest.id()));
 
         // check if present and same author
-        if (optionalAppointment.isEmpty() || !appointmentRequest.email().equals(optionalAppointment.get().getAuthor().getEmail()))
+        if (optionalAppointment.isEmpty() || !appointmentRequest.email().equals(optionalAppointment.get().getAuthor().
+                getEmail()))
             return false;
 
         Appointment appointment = optionalAppointment.get();
@@ -66,7 +69,7 @@ public class AppointmentService {
     }
 
     @Nullable
-    public List<Appointment> findByAuthor(final String email) {
+    public List<Appointment> findByEmail(final String email) {
 
         User user = userRepository.findByEmail(email);
 

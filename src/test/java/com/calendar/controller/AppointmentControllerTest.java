@@ -120,41 +120,41 @@ class AppointmentControllerTest {
     void findAppointmentsByAuthor_shouldReturnListOfAppointments_whenAppointmentOfAuthorFound() {
 
         appointments.add(appointment);
-        when(appointmentService.findByAuthor(user.getEmail())).thenReturn(appointments);
+        when(appointmentService.findByEmail(user.getEmail())).thenReturn(appointments);
 
-        List<Appointment> result = appointmentService.findByAuthor(user.getEmail());
+        List<Appointment> result = appointmentService.findByEmail(user.getEmail());
 
         ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(user.getEmail());
 
         assertNotNull(result);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(result, responseEntity.getBody());
-        verify(appointmentService, times(2)).findByAuthor(user.getEmail());
+        verify(appointmentService, times(2)).findByEmail(user.getEmail());
     }
 
     @Test
     void findAppointmentsByAuthor_shouldReturnNotFound_whenAuthorNotFound() {
 
-        when(appointmentService.findByAuthor(user.getEmail())).thenReturn(null);
+        when(appointmentService.findByEmail(user.getEmail())).thenReturn(null);
 
         ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(user.getEmail());
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals("Cannot find Appointments, because User could not be found!",
                 responseEntity.getBody());
-        verify(appointmentService, times(1)).findByAuthor(user.getEmail());
+        verify(appointmentService, times(1)).findByEmail(user.getEmail());
     }
 
     @Test
     void findAppointmentsByAuthor_shouldReturnNotFound_whenAuthorDoesNotHaveAppointments() {
 
-        when(appointmentService.findByAuthor(user.getEmail())).thenReturn(appointments);
+        when(appointmentService.findByEmail(user.getEmail())).thenReturn(appointments);
 
         ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(user.getEmail());
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals("Could not find any Appointments!", responseEntity.getBody());
-        verify(appointmentService, times(1)).findByAuthor(user.getEmail());
+        verify(appointmentService, times(1)).findByEmail(user.getEmail());
     }
 
     @Test
