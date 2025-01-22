@@ -1,6 +1,8 @@
 package com.calendar.controller;
 
 
+import com.calendar.communication.out.ErrorResponse;
+import com.calendar.communication.out.GenericResponse;
 import com.calendar.communication.in.AppointmentRequest;
 import com.calendar.entities.Appointment;
 import com.calendar.entities.User;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,10 +57,12 @@ class AppointmentControllerTest {
         when(appointmentRequest.isValid()).thenReturn(true);
         when(appointmentService.create(appointmentRequest)).thenReturn(true);
 
-        ResponseEntity<String> responseEntity = appointmentController.createAppointment(appointmentRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.
+                createAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("Appointment successfully created!", responseEntity.getBody());
+        assertEquals(GenericResponse.success("Appointment successfully created!"),
+                responseEntity.getBody());
         verify(appointmentService, times(1)).create(appointmentRequest);
     }
 
@@ -66,10 +71,12 @@ class AppointmentControllerTest {
 
         when(appointmentRequest.isValid()).thenReturn(false);
 
-        ResponseEntity<String> responseEntity = appointmentController.createAppointment(appointmentRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.
+                createAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals("Title, Email, Date missing or End Date is before Start Date!", responseEntity.getBody());
+        assertEquals(GenericResponse.error(new ErrorResponse("Title, Email, Date missing or End Date is before Start Date!")),
+                responseEntity.getBody());
         verify(appointmentService, never()).create(appointmentRequest);
     }
 
@@ -79,10 +86,12 @@ class AppointmentControllerTest {
         when(appointmentRequest.isValid()).thenReturn(true);
         when(appointmentService.create(appointmentRequest)).thenReturn(false);
 
-        ResponseEntity<String> responseEntity = appointmentController.createAppointment(appointmentRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.
+                createAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("Cannot create Appointment, User could not be found!", responseEntity.getBody());
+        assertEquals(GenericResponse.error(new ErrorResponse("Cannot create Appointment, User could not be found!")),
+                responseEntity.getBody());
         verify(appointmentService, times(1)).create(appointmentRequest);
     }
 
@@ -92,11 +101,12 @@ class AppointmentControllerTest {
         when(appointmentService.deleteById(UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"))).
                 thenReturn(true);
 
-        ResponseEntity<String> responseEntity = appointmentController.deleteAppointment(
-                UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"));
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.
+                deleteAppointment(UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"));
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("Appointment successfully deleted!", responseEntity.getBody());
+        assertEquals(GenericResponse.success("Appointment successfully deleted!"),
+                responseEntity.getBody());
         verify(appointmentService, times(1)).deleteById(
                 UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"));
     }
@@ -107,11 +117,12 @@ class AppointmentControllerTest {
         when(appointmentService.deleteById(UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"))).
                 thenReturn(false);
 
-        ResponseEntity<String> responseEntity = appointmentController.deleteAppointment(
-                UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"));
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.
+                deleteAppointment(UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"));
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("Appointment does not exist!", responseEntity.getBody());
+        assertEquals(GenericResponse.error(new ErrorResponse("Appointment does not exist!")),
+                responseEntity.getBody());
         verify(appointmentService, times(1)).deleteById(
                 UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"));
     }
@@ -124,11 +135,12 @@ class AppointmentControllerTest {
 
         List<Appointment> result = appointmentService.findByEmail(user.getEmail());
 
-        ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(user.getEmail());
+        ResponseEntity<GenericResponse<List<Appointment>, ErrorResponse>> responseEntity = appointmentController.
+                findAppointmentsByAuthor(user.getEmail());
 
         assertNotNull(result);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(result, responseEntity.getBody());
+        assertEquals(GenericResponse.success(result), responseEntity.getBody());
         verify(appointmentService, times(2)).findByEmail(user.getEmail());
     }
 
@@ -137,10 +149,11 @@ class AppointmentControllerTest {
 
         when(appointmentService.findByEmail(user.getEmail())).thenReturn(null);
 
-        ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(user.getEmail());
+        ResponseEntity<GenericResponse<List<Appointment>, ErrorResponse>> responseEntity = appointmentController.
+                findAppointmentsByAuthor(user.getEmail());
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("Cannot find Appointments, because User could not be found!",
+        assertEquals(GenericResponse.error(new ErrorResponse("Cannot find Appointments, because User could not be found!")),
                 responseEntity.getBody());
         verify(appointmentService, times(1)).findByEmail(user.getEmail());
     }
@@ -150,10 +163,11 @@ class AppointmentControllerTest {
 
         when(appointmentService.findByEmail(user.getEmail())).thenReturn(appointments);
 
-        ResponseEntity<?> responseEntity = appointmentController.findAppointmentsByAuthor(user.getEmail());
+        ResponseEntity<GenericResponse<List<Appointment>, ErrorResponse>> responseEntity = appointmentController.
+                findAppointmentsByAuthor(user.getEmail());
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("Could not find any Appointments!", responseEntity.getBody());
+        assertEquals(GenericResponse.error(new ErrorResponse("Could not find any Appointments!")), responseEntity.getBody());
         verify(appointmentService, times(1)).findByEmail(user.getEmail());
     }
 
@@ -163,10 +177,11 @@ class AppointmentControllerTest {
         when(appointmentRequest.isValid(appointmentRequest.id())).thenReturn(true);
         when(appointmentService.update(appointmentRequest)).thenReturn(true);
 
-        ResponseEntity<?> responseEntity = appointmentController.updateAppointment(appointmentRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.updateAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("Appointment successfully updated!", responseEntity.getBody());
+        assertEquals(GenericResponse.success("Appointment successfully updated!"),
+                responseEntity.getBody());
         verify(appointmentRequest, times(2)).isValid(appointmentRequest.id());
         verify(appointmentService, times(1)).update(appointmentRequest);
     }
@@ -176,11 +191,12 @@ class AppointmentControllerTest {
 
         when(appointmentRequest.isValid(appointmentRequest.id())).thenReturn(false);
 
-        ResponseEntity<?> responseEntity = appointmentController.updateAppointment(appointmentRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.updateAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertNotNull(Objects.requireNonNull(responseEntity.getBody()).error());
         assertEquals("Title, Email, Date or ID is missing or End Date is before Start Date!",
-                responseEntity.getBody());
+                responseEntity.getBody().error().errorMessage());
         verify(appointmentRequest, times(2)).isValid(appointmentRequest.id());
         verify(appointmentService, never()).update(appointmentRequest);
     }
@@ -191,10 +207,12 @@ class AppointmentControllerTest {
         when(appointmentRequest.isValid(appointmentRequest.id())).thenReturn(true);
         when(appointmentService.update(appointmentRequest)).thenReturn(false);
 
-        ResponseEntity<?> responseEntity = appointmentController.updateAppointment(appointmentRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.updateAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("No Appointments found for the given Author!", responseEntity.getBody());
+        assertNotNull(Objects.requireNonNull(responseEntity.getBody()).error());
+        assertEquals("No Appointments found for the given Author!",
+                responseEntity.getBody().error().errorMessage());
         verify(appointmentRequest, times(2)).isValid(appointmentRequest.id());
         verify(appointmentService, times(1)).update(appointmentRequest);
     }
