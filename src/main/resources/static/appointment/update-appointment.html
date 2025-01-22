@@ -57,12 +57,16 @@
             },
             body: JSON.stringify({id, title, email, startDateTime, endDateTime, description })
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-            document.getElementById('updateResult').innerText = data;
+            if(data.error){
+                document.getElementById('updateResult').innerText = data.error.errorMessage;
+            }
+            else
+                document.getElementById('updateResult').innerText = data.response;
         })
         .catch(error => {
-            document.getElementById('updateResult').innerText = 'Error updating appointment: ' + error.message;
+            document.getElementById('updateResult').innerText = 'Error updating appointment: ' + error.errorMessage;
         });
     }
 </script>
