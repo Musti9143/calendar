@@ -30,11 +30,14 @@
         })
         .then(response => response.json())
         .then(data => {
-            if(data.error){
-                document.getElementById('deleteResult').innerText = data.error.errorMessage;
+            if (data.error) {
+                document.getElementById('deleteResult').innerHTML = `<div class="alert alert-danger" role="alert">${data.error.errorMessage}</div>`;
+            } else {
+                document.getElementById('deleteResult').innerHTML = `<div class="alert alert-success" role="alert">${data.response}</div>`;
             }
-            else
-                document.getElementById('deleteResult').innerText = data.response;
+        })
+        .catch(error => {
+            document.getElementById('deleteResult').innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div>`;
         });
     }
 </script>

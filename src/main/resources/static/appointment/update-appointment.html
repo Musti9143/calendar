@@ -59,14 +59,14 @@
         })
         .then(response => response.json())
         .then(data => {
-            if(data.error){
-                document.getElementById('updateResult').innerText = data.error.errorMessage;
+            if (data.error) {
+                document.getElementById('updateResult').innerHTML = `<div class="alert alert-danger" role="alert">${data.error.errorMessage}</div>`;
+            } else {
+                document.getElementById('updateResult').innerHTML = `<div class="alert alert-success" role="alert">${data.response}</div>`;
             }
-            else
-                document.getElementById('updateResult').innerText = data.response;
         })
         .catch(error => {
-            document.getElementById('updateResult').innerText = 'Error updating appointment: ' + error.errorMessage;
+            document.getElementById('updateResult').innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div>`;
         });
     }
 </script>
