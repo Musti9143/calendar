@@ -38,11 +38,16 @@
             return response.json();
         })
         .then(appointments => {
-            const table = buildTable(appointments);
-            document.getElementById('findResult').innerHTML = table;
+            if(appointments.error){
+                document.getElementById('findResult').innerHTML = appointments.error.errorMessage;
+            }
+            else {
+                const table = buildTable(appointments);
+                document.getElementById('findResult').innerHTML = table;
+            }
         })
         .catch(error => {
-            document.getElementById('findResult').innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div>`;
+            document.getElementById('findResult').innerHTML = `<div class="alert alert-danger" role="alert">${error.errorMessage}</div>`;
         });
     }
 

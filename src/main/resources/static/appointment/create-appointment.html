@@ -52,12 +52,16 @@
             },
             body: JSON.stringify({ title, email, startDateTime, endDateTime, description })
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-            document.getElementById('createResult').innerText = data;
+            if(data.error){
+                document.getElementById('createResult').innerText = data.error.errorMessage;
+            }
+            else
+                document.getElementById('createResult').innerText = data.response;
         })
         .catch(error => {
-            document.getElementById('createResult').innerText = 'Error creating appointment: ' + error.message;
+            document.getElementById('createResult').innerText = 'Error creating appointment: ' + error.errorMessage;
         });
     }
 </script>

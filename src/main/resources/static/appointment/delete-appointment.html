@@ -29,12 +29,16 @@
         fetch(`/api/v1/appointment/delete/${appointmentId}`, {
             method: 'DELETE'
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-            document.getElementById('deleteResult').innerText = data;
+            if(data.error){
+                document.getElementById('deleteResult').innerText = data.error.errorMessage;
+            }
+            else
+                document.getElementById('deleteResult').innerText = data.response;
         })
         .catch(error => {
-            document.getElementById('deleteResult').innerText = 'Error deleting appointment: ' + error.message;
+            document.getElementById('deleteResult').innerText = 'Error deleting appointment: ' + error.errorMessage;
         });
     }
 </script>
