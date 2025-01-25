@@ -42,9 +42,16 @@
             },
             body: JSON.stringify({ name, surname, email })
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-            document.getElementById('createResult').innerText = data;
+            if (data.error) {
+                document.getElementById('createResult').innerHTML = `<div class="alert alert-danger" role="alert">${data.error.errorMessage}</div>`;
+            } else {
+                document.getElementById('createResult').innerHTML = `<div class="alert alert-success" role="alert">${data.response}</div>`;
+            }
+        })
+        .catch(error => {
+            document.getElementById('createResult').innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div>`;
         });
     }
 </script>
