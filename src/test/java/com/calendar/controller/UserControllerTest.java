@@ -37,7 +37,7 @@ class UserControllerTest {
         when(userRequest.isValid()).thenReturn(true);
         when(userService.create(userRequest)).thenReturn(true);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController.createUser(userRequest);
+        ResponseEntity<GenericResponse<String>> responseEntity = userController.createUser(userRequest);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(GenericResponse.success("Successfully created!"), responseEntity.getBody());
@@ -49,7 +49,7 @@ class UserControllerTest {
 
         when(userRequest.isValid()).thenReturn(false);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController.createUser(userRequest);
+        ResponseEntity<GenericResponse<String>> responseEntity = userController.createUser(userRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals(GenericResponse.error(new ErrorResponse("Something missing!")),
@@ -63,7 +63,7 @@ class UserControllerTest {
         when(userRequest.isValid()).thenReturn(true);
         when(userService.create(userRequest)).thenReturn(false);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController.createUser(userRequest);
+        ResponseEntity<GenericResponse<String>> responseEntity = userController.createUser(userRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals(GenericResponse.error(new ErrorResponse("User already exists!")),
@@ -78,7 +78,7 @@ class UserControllerTest {
 
         UserResponse result = userService.findUser("max.power@email.com");
 
-        ResponseEntity<GenericResponse<UserResponse, ErrorResponse>> responseEntity = userController
+        ResponseEntity<GenericResponse<UserResponse>> responseEntity = userController
                 .findUser("max.power@email.com");
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -90,7 +90,7 @@ class UserControllerTest {
 
         when(userService.findUser("max.power@email.com")).thenReturn(null);
 
-        ResponseEntity<GenericResponse<UserResponse, ErrorResponse>> responseEntity = userController
+        ResponseEntity<GenericResponse<UserResponse>> responseEntity = userController
                 .findUser("max.power@email.com");
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -102,7 +102,7 @@ class UserControllerTest {
     void deleteUser_shouldDeleteUser_whenUserExistInRepo() {
 
         when(userService.delete("max.power@email.com")).thenReturn(true);
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
+        ResponseEntity<GenericResponse<String>> responseEntity = userController
                 .deleteUser("max.power@email.com");
 
         assertNotNull(responseEntity);
@@ -116,7 +116,7 @@ class UserControllerTest {
     void deleteUser_shouldNotDeleteUser_whenUserDoesNotExistInRepo() {
 
         when(userService.delete("max.power@email.com")).thenReturn(false);
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
+        ResponseEntity<GenericResponse<String>> responseEntity = userController
                 .deleteUser("max.power@email.com");
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -130,7 +130,7 @@ class UserControllerTest {
 
         when(userRequest.isValid()).thenReturn(false);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
+        ResponseEntity<GenericResponse<String>> responseEntity = userController
                 .updateUser(userRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -145,7 +145,7 @@ class UserControllerTest {
         when(userRequest.isValid()).thenReturn(true);
         when(userService.update(userRequest)).thenReturn(true);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
+        ResponseEntity<GenericResponse<String>> responseEntity = userController
                 .updateUser(userRequest);
 
         assertEquals(GenericResponse.success("Successfully updated!"), responseEntity.getBody());
@@ -160,7 +160,7 @@ class UserControllerTest {
         when(userRequest.isValid()).thenReturn(true);
         when(userService.update(userRequest)).thenReturn(false);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
+        ResponseEntity<GenericResponse<String>> responseEntity = userController
                 .updateUser(userRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
