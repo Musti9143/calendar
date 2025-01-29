@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<GenericResponse<String, ErrorResponse>> createUser(@RequestBody final UserRequest userRequest) {
+    public ResponseEntity<GenericResponse<String>> createUser(@RequestBody final UserRequest userRequest) {
 
         if (!userRequest.isValid())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/findUser/{email}")
-    public ResponseEntity<GenericResponse<UserResponse, ErrorResponse>> findUser(@PathVariable final String email) {
+    public ResponseEntity<GenericResponse<UserResponse>> findUser(@PathVariable final String email) {
 
         final UserResponse userResponse = userService.findUser(email);
         if (userResponse != null)
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{email}")
-    public ResponseEntity<GenericResponse<String, ErrorResponse>> deleteUser(@PathVariable final String email) {
+    public ResponseEntity<GenericResponse<String>> deleteUser(@PathVariable final String email) {
 
         if (userService.delete(email))
             return ResponseEntity.ok(GenericResponse.success("Successfully deleted {" + email + "}"));
@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<GenericResponse<String, ErrorResponse>> updateUser(@RequestBody final UserRequest userRequest) {
+    public ResponseEntity<GenericResponse<String>> updateUser(@RequestBody final UserRequest userRequest) {
 
         if (!userRequest.isValid())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -57,7 +57,7 @@ class AppointmentControllerTest {
         when(appointmentRequest.isValid()).thenReturn(true);
         when(appointmentService.create(appointmentRequest)).thenReturn(true);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.
+        ResponseEntity<GenericResponse<String>> responseEntity = appointmentController.
                 createAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -71,7 +71,7 @@ class AppointmentControllerTest {
 
         when(appointmentRequest.isValid()).thenReturn(false);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.
+        ResponseEntity<GenericResponse<String>> responseEntity = appointmentController.
                 createAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -86,7 +86,7 @@ class AppointmentControllerTest {
         when(appointmentRequest.isValid()).thenReturn(true);
         when(appointmentService.create(appointmentRequest)).thenReturn(false);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.
+        ResponseEntity<GenericResponse<String>> responseEntity = appointmentController.
                 createAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -101,7 +101,7 @@ class AppointmentControllerTest {
         when(appointmentService.deleteById(UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"))).
                 thenReturn(true);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.
+        ResponseEntity<GenericResponse<String>> responseEntity = appointmentController.
                 deleteAppointment(UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"));
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -117,7 +117,7 @@ class AppointmentControllerTest {
         when(appointmentService.deleteById(UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"))).
                 thenReturn(false);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.
+        ResponseEntity<GenericResponse<String>> responseEntity = appointmentController.
                 deleteAppointment(UUID.fromString("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27"));
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -135,7 +135,7 @@ class AppointmentControllerTest {
 
         List<Appointment> result = appointmentService.findByEmail(user.getEmail());
 
-        ResponseEntity<GenericResponse<List<Appointment>, ErrorResponse>> responseEntity = appointmentController.
+        ResponseEntity<GenericResponse<List<Appointment>>> responseEntity = appointmentController.
                 findAppointmentsByAuthor(user.getEmail());
 
         assertNotNull(result);
@@ -149,7 +149,7 @@ class AppointmentControllerTest {
 
         when(appointmentService.findByEmail(user.getEmail())).thenReturn(null);
 
-        ResponseEntity<GenericResponse<List<Appointment>, ErrorResponse>> responseEntity = appointmentController.
+        ResponseEntity<GenericResponse<List<Appointment>>> responseEntity = appointmentController.
                 findAppointmentsByAuthor(user.getEmail());
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -163,7 +163,7 @@ class AppointmentControllerTest {
 
         when(appointmentService.findByEmail(user.getEmail())).thenReturn(appointments);
 
-        ResponseEntity<GenericResponse<List<Appointment>, ErrorResponse>> responseEntity = appointmentController.
+        ResponseEntity<GenericResponse<List<Appointment>>> responseEntity = appointmentController.
                 findAppointmentsByAuthor(user.getEmail());
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -177,7 +177,7 @@ class AppointmentControllerTest {
         when(appointmentRequest.isValid(appointmentRequest.id())).thenReturn(true);
         when(appointmentService.update(appointmentRequest)).thenReturn(true);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.updateAppointment(appointmentRequest);
+        ResponseEntity<GenericResponse<String>> responseEntity = appointmentController.updateAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(GenericResponse.success("Appointment successfully updated!"),
@@ -191,7 +191,7 @@ class AppointmentControllerTest {
 
         when(appointmentRequest.isValid(appointmentRequest.id())).thenReturn(false);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.updateAppointment(appointmentRequest);
+        ResponseEntity<GenericResponse<String>> responseEntity = appointmentController.updateAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertNotNull(Objects.requireNonNull(responseEntity.getBody()).error());
@@ -207,7 +207,7 @@ class AppointmentControllerTest {
         when(appointmentRequest.isValid(appointmentRequest.id())).thenReturn(true);
         when(appointmentService.update(appointmentRequest)).thenReturn(false);
 
-        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = appointmentController.updateAppointment(appointmentRequest);
+        ResponseEntity<GenericResponse<String>> responseEntity = appointmentController.updateAppointment(appointmentRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertNotNull(Objects.requireNonNull(responseEntity.getBody()).error());

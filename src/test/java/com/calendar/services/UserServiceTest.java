@@ -97,12 +97,12 @@ class UserServiceTest {
 
         when(userRepository.findByEmail(userRequest.email())).thenReturn(user);
 
-        assertNotEquals(userRequest.surname(), user.getSurname());
-        assertNotEquals(userRequest.name(), user.getName());
-
         boolean result = userService.update(userRequest);
 
         assertTrue(result);
+
+        assertEquals(userRequest.surname(), user.getSurname());
+        assertEquals(userRequest.name(), user.getName());
 
         verify(userRepository, times(1)).findByEmail(userRequest.email());
         verify(userRepository, times(1)).save(user);
