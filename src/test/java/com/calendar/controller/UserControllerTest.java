@@ -130,7 +130,7 @@ class UserControllerTest {
 
         when(userRequest.isValid()).thenReturn(false);
 
-        ResponseEntity<GenericResponse<UserResponse, ErrorResponse>> responseEntity = userController
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
                 .updateUser(userRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -143,12 +143,12 @@ class UserControllerTest {
     void updateUser_shouldReturnOk_whenUserIsUpdated() {
 
         when(userRequest.isValid()).thenReturn(true);
-        when(userService.update(userRequest)).thenReturn(userResponse);
+        when(userService.update(userRequest)).thenReturn(true);
 
-        ResponseEntity<GenericResponse<UserResponse, ErrorResponse>> responseEntity = userController
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
                 .updateUser(userRequest);
 
-        assertEquals(GenericResponse.success(userResponse), responseEntity.getBody());
+        assertEquals(GenericResponse.success("Successfully updated!"), responseEntity.getBody());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         verify(userService, times(1)).update(userRequest);
 
@@ -158,9 +158,9 @@ class UserControllerTest {
     void updateUser_shouldReturnNotFound_whenUserDoesNotExist() {
 
         when(userRequest.isValid()).thenReturn(true);
-        when(userService.update(userRequest)).thenReturn(null);
+        when(userService.update(userRequest)).thenReturn(false);
 
-        ResponseEntity<GenericResponse<UserResponse, ErrorResponse>> responseEntity = userController
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
                 .updateUser(userRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());

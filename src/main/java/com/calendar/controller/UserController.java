@@ -53,15 +53,14 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<GenericResponse<UserResponse, ErrorResponse>> updateUser(@RequestBody final UserRequest userRequest) {
+    public ResponseEntity<GenericResponse<String, ErrorResponse>> updateUser(@RequestBody final UserRequest userRequest) {
 
         if (!userRequest.isValid())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(GenericResponse.error(new ErrorResponse("Something missing!")));
 
-        final UserResponse userResponse = userService.update(userRequest);
-        if (userResponse != null)
-            return ResponseEntity.ok(GenericResponse.success(userResponse));
+        if (userService.update(userRequest))
+            return ResponseEntity.ok(GenericResponse.success("Successfully updated!"));
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(GenericResponse.error(new ErrorResponse("User could not be found!")));
 

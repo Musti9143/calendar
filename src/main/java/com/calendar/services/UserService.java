@@ -38,18 +38,18 @@ public class UserService {
         return true;
     }
 
-    public UserResponse update(@Nonnull final UserRequest userRequest) {
+    public boolean update(@Nonnull final UserRequest userRequest) {
 
         final User user = userRepository.findByEmail(userRequest.email());
         if (user == null)
-            return null;
+            return false;
 
         user.setName(userRequest.name());
         user.setSurname(userRequest.surname());
 
         userRepository.save(user);
 
-        return userMapper.toUserResponse(user);
+        return true;
     }
 
     public UserResponse findUser(@Nonnull final String email) {
