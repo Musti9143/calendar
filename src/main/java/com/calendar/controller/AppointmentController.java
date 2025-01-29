@@ -24,7 +24,7 @@ public class AppointmentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<GenericResponse<String, ErrorResponse>> createAppointment(@RequestBody final AppointmentRequest appointmentRequest) {
+    public ResponseEntity<GenericResponse<String>> createAppointment(@RequestBody final AppointmentRequest appointmentRequest) {
 
         if (!appointmentRequest.isValid())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -37,7 +37,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<GenericResponse<String, ErrorResponse>> deleteAppointment(@PathVariable final UUID id) {
+    public ResponseEntity<GenericResponse<String>> deleteAppointment(@PathVariable final UUID id) {
 
         if (appointmentService.deleteById(id))
             return ResponseEntity.ok(GenericResponse.success("Appointment successfully deleted!"));
@@ -46,7 +46,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/findByAuthor/{email}")
-    public ResponseEntity<GenericResponse<List<Appointment>, ErrorResponse>> findAppointmentsByAuthor(@PathVariable final String email) {
+    public ResponseEntity<GenericResponse<List<Appointment>>> findAppointmentsByAuthor(@PathVariable final String email) {
 
         List<Appointment> appointments = appointmentService.findByEmail(email);
 
@@ -60,7 +60,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<GenericResponse<String, ErrorResponse>> updateAppointment(@RequestBody final AppointmentRequest appointmentRequest) {
+    public ResponseEntity<GenericResponse<String>> updateAppointment(@RequestBody final AppointmentRequest appointmentRequest) {
 
         if (!appointmentRequest.isValid(appointmentRequest.id()))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

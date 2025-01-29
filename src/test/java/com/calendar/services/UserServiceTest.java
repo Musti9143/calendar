@@ -35,7 +35,7 @@ class UserServiceTest {
     void setUp() {
 
         userRequest = new UserRequest("Max", "Power", "max.power@email.com");
-        user = new User("Max", "Power", "max.power@email.com");
+        user = new User("Maxi", "Pow", "max.power@email.com");
         userResponse = new UserResponse("Max", "Power", "max.power@email.com");
     }
 
@@ -80,32 +80,32 @@ class UserServiceTest {
     }
 
     @Test
-    void update_shouldReturnNull_whenUserDoesNotExist() {
+    void update_shouldReturnFalse_whenUserDoesNotExist() {
 
         when(userRepository.findByEmail(userRequest.email())).thenReturn(null);
 
-        assertNull(userService.update(userRequest));
+        boolean result = userService.update(userRequest);
+
+        assertFalse(result);
 
         verify(userRepository, times(1)).findByEmail(userRequest.email());
         verify(userRepository, never()).save(any());
-        verify(userMapper, never()).toUserResponse(any());
     }
 
     @Test
-    void update_shouldReturnUserResponse_whenUserIsUpdated() {
+    void update_shouldReturnTrue_whenUserIsUpdated() {
 
         when(userRepository.findByEmail(userRequest.email())).thenReturn(user);
-        when(userMapper.toUserResponse(user)).thenReturn(userResponse);
 
-        UserResponse result = userService.update(userRequest);
+        boolean result = userService.update(userRequest);
 
-        assertNotNull(result);
-        assertEquals(userRequest.name(), result.name());
-        assertEquals(userRequest.surname(), result.surname());
+        assertTrue(result);
+
+        assertEquals(userRequest.surname(), user.getSurname());
+        assertEquals(userRequest.name(), user.getName());
 
         verify(userRepository, times(1)).findByEmail(userRequest.email());
         verify(userRepository, times(1)).save(user);
-        verify(userMapper, times(1)).toUserResponse(user);
     }
 
     @Test

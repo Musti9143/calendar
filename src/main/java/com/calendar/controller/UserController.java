@@ -1,6 +1,8 @@
 package com.calendar.controller;
 
 import com.calendar.communication.in.UserRequest;
+import com.calendar.communication.out.ErrorResponse;
+import com.calendar.communication.out.GenericResponse;
 import com.calendar.communication.out.UserResponse;
 import com.calendar.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -19,43 +21,48 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createUser(@RequestBody final UserRequest userRequest) {
+    public ResponseEntity<GenericResponse<String>> createUser(@RequestBody final UserRequest userRequest) {
 
         if (!userRequest.isValid())
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something missing!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(GenericResponse.error(new ErrorResponse("Something missing!")));
 
         if (userService.create(userRequest))
-            return ResponseEntity.ok("Successfully created!");
-        return ResponseEntity.ok("User already exists!");
+            return ResponseEntity.ok(GenericResponse.success("Successfully created!"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(GenericResponse.error(new ErrorResponse("User already exists!")));
     }
 
     @GetMapping("/findUser/{email}")
-    public ResponseEntity<?> findUser(@PathVariable final String email) {
+    public ResponseEntity<GenericResponse<UserResponse>> findUser(@PathVariable final String email) {
 
         final UserResponse userResponse = userService.findUser(email);
         if (userResponse != null)
-            return ResponseEntity.ok(userResponse);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User could not be found!");
+            return ResponseEntity.ok(GenericResponse.success(userResponse));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(GenericResponse.error(new ErrorResponse("User could not be found!")));
     }
 
     @DeleteMapping("/delete/{email}")
-    public ResponseEntity<String> deleteUser(@PathVariable final String email) {
+    public ResponseEntity<GenericResponse<String>> deleteUser(@PathVariable final String email) {
 
         if (userService.delete(email))
-            return ResponseEntity.ok("Successfully deleted {" + email + "}");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with given Email does not exist!");
+            return ResponseEntity.ok(GenericResponse.success("Successfully deleted {" + email + "}"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(GenericResponse.error(new ErrorResponse("User with given Email does not exist!")));
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateUser(@RequestBody final UserRequest userRequest) {
+    public ResponseEntity<GenericResponse<String>> updateUser(@RequestBody final UserRequest userRequest) {
 
         if (!userRequest.isValid())
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something missing!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(GenericResponse.error(new ErrorResponse("Something missing!")));
 
-        final UserResponse userResponse = userService.update(userRequest);
-        if (userResponse != null)
-            return ResponseEntity.ok(userResponse);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User could not be found!");
+        if (userService.update(userRequest))
+            return ResponseEntity.ok(GenericResponse.success("Successfully updated!"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(GenericResponse.error(new ErrorResponse("User could not be found!")));
 
     }
 
