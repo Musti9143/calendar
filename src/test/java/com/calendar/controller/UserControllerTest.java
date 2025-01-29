@@ -1,6 +1,8 @@
 package com.calendar.controller;
 
 import com.calendar.communication.in.UserRequest;
+import com.calendar.communication.out.ErrorResponse;
+import com.calendar.communication.out.GenericResponse;
 import com.calendar.communication.out.UserResponse;
 import com.calendar.services.UserService;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,10 +37,10 @@ class UserControllerTest {
         when(userRequest.isValid()).thenReturn(true);
         when(userService.create(userRequest)).thenReturn(true);
 
-        ResponseEntity<String> responseEntity = userController.createUser(userRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController.createUser(userRequest);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("Successfully created!", responseEntity.getBody());
+        assertEquals(GenericResponse.success("Successfully created!"), responseEntity.getBody());
         verify(userService, times(1)).create(userRequest);
     }
 
@@ -46,23 +49,25 @@ class UserControllerTest {
 
         when(userRequest.isValid()).thenReturn(false);
 
-        ResponseEntity<String> responseEntity = userController.createUser(userRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController.createUser(userRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals("Something missing!", responseEntity.getBody());
+        assertEquals(GenericResponse.error(new ErrorResponse("Something missing!")),
+                responseEntity.getBody());
         verify(userService, never()).create(userRequest);
     }
 
     @Test
-    void createUser_shouldReturnOk_whenUserAlreadyExists() {
+    void createUser_shouldReturnBadRequest_whenUserAlreadyExists() {
 
         when(userRequest.isValid()).thenReturn(true);
         when(userService.create(userRequest)).thenReturn(false);
 
-        ResponseEntity<String> responseEntity = userController.createUser(userRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController.createUser(userRequest);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("User already exists!", responseEntity.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(GenericResponse.error(new ErrorResponse("User already exists!")),
+                responseEntity.getBody());
         verify(userService, times(1)).create(userRequest);
     }
 
@@ -73,10 +78,11 @@ class UserControllerTest {
 
         UserResponse result = userService.findUser("max.power@email.com");
 
-        ResponseEntity<?> responseEntity = userController.findUser("max.power@email.com");
+        ResponseEntity<GenericResponse<UserResponse, ErrorResponse>> responseEntity = userController
+                .findUser("max.power@email.com");
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(result, responseEntity.getBody());
+        assertEquals(GenericResponse.success(result), responseEntity.getBody());
     }
 
     @Test
@@ -84,20 +90,25 @@ class UserControllerTest {
 
         when(userService.findUser("max.power@email.com")).thenReturn(null);
 
-        ResponseEntity<?> responseEntity = userController.findUser("max.power@email.com");
+        ResponseEntity<GenericResponse<UserResponse, ErrorResponse>> responseEntity = userController
+                .findUser("max.power@email.com");
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("User could not be found!", responseEntity.getBody());
+        assertEquals(GenericResponse.error(new ErrorResponse("User could not be found!")),
+                responseEntity.getBody());
     }
 
     @Test
     void deleteUser_shouldDeleteUser_whenUserExistInRepo() {
 
         when(userService.delete("max.power@email.com")).thenReturn(true);
-        ResponseEntity<String> responseEntity = userController.deleteUser("max.power@email.com");
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
+                .deleteUser("max.power@email.com");
 
+        assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("Successfully deleted {max.power@email.com}", responseEntity.getBody());
+        assertEquals(GenericResponse.success("Successfully deleted {max.power@email.com}")
+                , responseEntity.getBody());
         verify(userService, times(1)).delete("max.power@email.com");
     }
 
@@ -105,10 +116,12 @@ class UserControllerTest {
     void deleteUser_shouldNotDeleteUser_whenUserDoesNotExistInRepo() {
 
         when(userService.delete("max.power@email.com")).thenReturn(false);
-        ResponseEntity<String> responseEntity = userController.deleteUser("max.power@email.com");
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
+                .deleteUser("max.power@email.com");
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("User with given Email does not exist!", responseEntity.getBody());
+        assertEquals(GenericResponse.error(new ErrorResponse("User with given Email does not exist!"))
+                , responseEntity.getBody());
         verify(userService, times(1)).delete("max.power@email.com");
     }
 
@@ -117,10 +130,12 @@ class UserControllerTest {
 
         when(userRequest.isValid()).thenReturn(false);
 
-        ResponseEntity<?> responseEntity = userController.updateUser(userRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
+                .updateUser(userRequest);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals("Something missing!", responseEntity.getBody());
+        assertEquals(GenericResponse.error(new ErrorResponse("Something missing!"))
+                , responseEntity.getBody());
         verify(userService, never()).update(userRequest);
     }
 
@@ -128,11 +143,12 @@ class UserControllerTest {
     void updateUser_shouldReturnOk_whenUserIsUpdated() {
 
         when(userRequest.isValid()).thenReturn(true);
-        when(userService.update(userRequest)).thenReturn(userResponse);
+        when(userService.update(userRequest)).thenReturn(true);
 
-        ResponseEntity<?> responseEntity = userController.updateUser(userRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
+                .updateUser(userRequest);
 
-        assertEquals(userResponse, responseEntity.getBody());
+        assertEquals(GenericResponse.success("Successfully updated!"), responseEntity.getBody());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         verify(userService, times(1)).update(userRequest);
 
@@ -142,12 +158,14 @@ class UserControllerTest {
     void updateUser_shouldReturnNotFound_whenUserDoesNotExist() {
 
         when(userRequest.isValid()).thenReturn(true);
-        when(userService.update(userRequest)).thenReturn(null);
+        when(userService.update(userRequest)).thenReturn(false);
 
-        ResponseEntity<?> responseEntity = userController.updateUser(userRequest);
+        ResponseEntity<GenericResponse<String, ErrorResponse>> responseEntity = userController
+                .updateUser(userRequest);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("User could not be found!", responseEntity.getBody());
+        assertEquals(GenericResponse.error(new ErrorResponse("User could not be found!"))
+                , responseEntity.getBody());
         verify(userService, times(1)).update(userRequest);
     }
 }
