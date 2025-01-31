@@ -1,20 +1,30 @@
 package com.calendar.services;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.calendar.config.SecurityConfig;
+import jakarta.annotation.Nonnull;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PasswordService {
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final SecurityConfig securityConfig;
 
-    public String hashPassword(String input) {
-
-        return passwordEncoder.encode(input);
+    public PasswordService(@Nonnull final SecurityConfig securityConfig) {
+        this.securityConfig = securityConfig;
     }
 
-    public boolean verifyPassword(String input, String hashedPassword) {
+    private String concatPepperPassword(String password) {
+        return password + securityConfig.getPepper();
+    }
 
-        return passwordEncoder.matches(input, hashedPassword);
+    public String hashPassword(String rawPassword) {
+
+        return BCrypt.hashpw(concatPepperPassword(rawPassword), BCrypt.gensalt(12));
+    }
+
+    public boolean verifyPassword(String rawPassword, String hashedPassword) {
+
+        return BCrypt.checkpw(concatPepperPassword(rawPassword), hashedPassword);
     }
 }

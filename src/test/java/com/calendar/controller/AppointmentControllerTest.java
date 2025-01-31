@@ -46,7 +46,7 @@ class AppointmentControllerTest {
     void setUp() {
 
         appointments = new ArrayList<>();
-        user = new User("Max", "Power", "max.power@email.com");
+        user = new User("Max", "Power", "max.power@email.com", "123456qwe");
         appointment = new Appointment("Title", user, Timestamp.valueOf("2014-01-01 00:00:00"),
                 Timestamp.valueOf("2014-01-01 00:00:00"), "description");
     }

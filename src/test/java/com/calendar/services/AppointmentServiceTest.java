@@ -47,7 +47,7 @@ class AppointmentServiceTest {
     @BeforeEach
     void setUp() {
         appointments = new ArrayList<>();
-        user = new User("Max", "Power", EMAIL);
+        user = new User("Max", "Power", EMAIL, "123456qwe");
         appointmentRequest = new AppointmentRequest("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27", "Title" ,
                 EMAIL, Timestamp.valueOf("2014-01-01 00:00:00"),
                 Timestamp.valueOf("2014-01-01 00:00:00"), "description");
@@ -135,7 +135,7 @@ class AppointmentServiceTest {
     @Test
     void update_shouldReturnFalse_whenEmailDoesNotMatch() {
 
-        User diffrentUser = new User("Diffrent", "User", "email");
+        User diffrentUser = new User("Diffrent", "User", "email", "123456qwe");
         appointment.setAuthor(diffrentUser);
         when(appointmentRepository.findById(UUID.fromString(appointmentRequest.id()))).
                 thenReturn(Optional.ofNullable(appointment));

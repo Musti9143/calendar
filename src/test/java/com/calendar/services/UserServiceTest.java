@@ -34,8 +34,8 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
 
-        userRequest = new UserRequest("Max", "Power", "max.power@email.com");
-        user = new User("Maxi", "Pow", "max.power@email.com");
+        userRequest = new UserRequest("Max", "Power", "max.power@email.com", "123456qwe");
+        user = new User("Maxi", "Pow", "max.power@email.com", "123456qwe");
         userResponse = new UserResponse("Max", "Power", "max.power@email.com");
     }
 

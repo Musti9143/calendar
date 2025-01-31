@@ -7,4 +7,4 @@
 */
 
 ALTER TABLE public.user
-ADD COLUMN hashed_password char(60) not null;
+ADD COLUMN IF NOT EXISTS password varchar(255);

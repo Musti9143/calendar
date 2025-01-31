@@ -13,16 +13,24 @@ public class UserService {
 
     private final IUserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordService passwordService;
 
-    public UserService(@Nonnull final IUserRepository userRepository, @Nonnull final UserMapper userMapper) {
+    public UserService(@Nonnull final IUserRepository userRepository, @Nonnull final UserMapper userMapper,
+                       @Nonnull final PasswordService passwordService) {
+
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordService = passwordService;
     }
 
     public boolean create(@Nonnull final UserRequest userRequest) {
         final User user = userMapper.toUser(userRequest);
 
+        String hashedPassword = passwordService.hashPassword(user.getPassword());
+
         if (userRepository.findByEmail(user.getEmail()) == null) {
+
+            user.setPassword(hashedPassword);
             userRepository.save(user);
             return true;
         }
