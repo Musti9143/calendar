@@ -11,7 +11,6 @@ public record UserRequest(String name, String surname, String email, String pass
         return StringUtils.isNotBlank(this.name) &&
                 StringUtils.isNotBlank(this.surname) &&
                 StringUtils.isNotBlank(this.email) &&
-                StringUtils.isNotBlank(this.password) &&
                 isEmailValid;
     }
 }
