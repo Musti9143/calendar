@@ -1,5 +1,6 @@
 package com.calendar.communication.in;
 
+import com.calendar.entities.Appointment;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -7,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 public record AppointmentRequest(String id, String title, String email, Timestamp startDateTime, Timestamp endDateTime,
-                                 String description) {
+                                 String description, Appointment.Location location) {
     public boolean isValid() {
 
         boolean isEmailValid = EmailValidator.getInstance().isValid(this.email);

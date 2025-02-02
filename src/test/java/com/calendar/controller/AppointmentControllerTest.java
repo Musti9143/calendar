@@ -41,14 +41,17 @@ class AppointmentControllerTest {
     private List<Appointment> appointments;
     private User user;
     private Appointment appointment;
+    private Appointment.Location location;
 
     @BeforeEach
     void setUp() {
 
+        location = new Appointment.Location("Musterstrasse","123","12345",
+                "Musterstadt", "DEU");
         appointments = new ArrayList<>();
         user = new User("Max", "Power", "max.power@email.com", "123456qwe");
         appointment = new Appointment("Title", user, Timestamp.valueOf("2014-01-01 00:00:00"),
-                Timestamp.valueOf("2014-01-01 00:00:00"), "description");
+                Timestamp.valueOf("2014-01-01 00:00:00"), "description", location);
     }
 
     @Test

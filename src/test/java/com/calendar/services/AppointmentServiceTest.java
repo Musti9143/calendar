@@ -42,17 +42,20 @@ class AppointmentServiceTest {
     private List<Appointment> appointments;
     private User user;
     private static final String EMAIL = "max.power@email.com";
+    private Appointment.Location location;
 
 
     @BeforeEach
     void setUp() {
         appointments = new ArrayList<>();
         user = new User("Max", "Power", EMAIL, "123456qwe");
+        location = new Appointment.Location("Musterstrasse","123","12345",
+                "Musterstadt", "DEU");
         appointmentRequest = new AppointmentRequest("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27", "Title" ,
                 EMAIL, Timestamp.valueOf("2014-01-01 00:00:00"),
-                Timestamp.valueOf("2014-01-01 00:00:00"), "description");
+                Timestamp.valueOf("2014-01-01 00:00:00"), "description", location);
         appointment = new Appointment("Title", user, Timestamp.valueOf("2014-01-01 00:00:00"),
-                Timestamp.valueOf("2014-01-01 00:00:00"), "description");
+                Timestamp.valueOf("2014-01-01 00:00:00"), "description", location);
         appointments.add(appointment);
     }
 

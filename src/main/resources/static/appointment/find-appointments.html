@@ -55,10 +55,12 @@
                         <th>Description</th>
                         <th>Start</th>
                         <th>End</th>
+                        <th>Location</th>
                     </tr>
                 </thead>
                 <tbody>`;
         appointments.forEach(appointment => {
+            const location = appointment.location ? `${appointment.location.street} ${appointment.location.streetNumber}, ${appointment.location.postalCode} ${appointment.location.city}, ${appointment.location.country}` : 'empty';
             table += `
                 <tbody>
                     <tr>
@@ -68,6 +70,7 @@
                         <td>${appointment.description}</td>
                         <td>${new Date(appointment.startDateTime).toLocaleString()}</td>
                         <td>${new Date(appointment.endDateTime).toLocaleString()}</td>
+                        <td>${location}</td>
                     </tr>`;
         });
 

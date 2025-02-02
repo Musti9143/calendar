@@ -17,9 +17,11 @@ class AppointmentMapperTest {
     @Test
     void toAppointment_shouldMapAppointmentRequestToAppointment() {
 
+        Appointment.Location location = new Appointment.Location("Musterstrasse","123",
+                "12345","Musterstadt", "DEU");
         final AppointmentRequest appointmentRequest = new AppointmentRequest("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27",
                 "Title", "Max.Power@email.com", Timestamp.valueOf("2014-01-01 00:00:00"),
-                Timestamp.valueOf("2014-01-01 00:00:00"), "description");
+                Timestamp.valueOf("2014-01-01 00:00:00"), "description", location);
         final User user = new User("Max", "Mustermann", "Max.Power@email.com", "123456qwe");
 
         final Appointment appointment = appointmentMapper.toAppointment(appointmentRequest,user);
@@ -33,9 +35,12 @@ class AppointmentMapperTest {
     @Test
     void toAppointmentResponse_shouldMapAppointmentToAppointmentResponse() {
 
-        final User user = new User("Max", "Mustermann", "Max.Power@email.com", "123456qwe");
+        final User user = new User("Max", "Mustermann", "Max.Power@email.com",
+                "123456qwe");
+        Appointment.Location location = new Appointment.Location("Musterstrasse","123",
+                "12345","Musterstadt", "DEU");
         final Appointment appointment = new Appointment("Title", user, Timestamp.valueOf("2014-01-01 00:00:00"),
-                Timestamp.valueOf("2014-01-01 00:00:00"), "description");
+                Timestamp.valueOf("2014-01-01 00:00:00"), "description", location);
 
         final AppointmentResponse appointmentResponse = appointmentMapper.toAppointmentResponse(appointment);
 
