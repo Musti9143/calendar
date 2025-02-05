@@ -24,18 +24,24 @@ class UserServiceTest {
     @Mock
     private UserMapper userMapper;
 
+    @Mock
+    private PasswordService passwordService;
+
     @InjectMocks
     private UserService userService;
 
     private UserRequest userRequest;
     private User user;
     private UserResponse userResponse;
+    private static final String RAW_PASSWORD = "meinPasswort";
+    private static final String HASHED_PASSWORD = "gehashtesPasswort";
+
 
     @BeforeEach
     void setUp() {
 
-        userRequest = new UserRequest("Max", "Power", "max.power@email.com", "123456qwe");
-        user = new User("Maxi", "Pow", "max.power@email.com", "123456qwe");
+        userRequest = new UserRequest("Max", "Power", "max.power@email.com", RAW_PASSWORD);
+        user = new User("Maxi", "Pow", "max.power@email.com", RAW_PASSWORD);
         userResponse = new UserResponse("Max", "Power", "max.power@email.com");
     }
 
@@ -43,6 +49,7 @@ class UserServiceTest {
     void create_shouldReturnTrue_whenUserDoesNotExist() {
 
         when(userMapper.toUser(userRequest)).thenReturn(user);
+        when(passwordService.hashPassword(RAW_PASSWORD)).thenReturn(HASHED_PASSWORD);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
 
         boolean result = userService.create(userRequest);

@@ -1,9 +1,9 @@
 package com.calendar.controller;
 
+import com.calendar.communication.out.AppointmentResponse;
 import com.calendar.communication.out.ErrorResponse;
 import com.calendar.communication.out.GenericResponse;
 import com.calendar.communication.in.AppointmentRequest;
-import com.calendar.entities.Appointment;
 import com.calendar.services.AppointmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class AppointmentController {
     @PostMapping("/create")
     public ResponseEntity<GenericResponse<String>> createAppointment(@RequestBody final AppointmentRequest appointmentRequest) {
 
-        if (!appointmentRequest.isValid())
+        if (!appointmentRequest.isAllValid())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(GenericResponse.error(new ErrorResponse("Title, Email, Date missing or End Date is before Start Date!")));
 
@@ -46,9 +46,9 @@ public class AppointmentController {
     }
 
     @GetMapping("/findByAuthor/{email}")
-    public ResponseEntity<GenericResponse<List<Appointment>>> findAppointmentsByAuthor(@PathVariable final String email) {
+    public ResponseEntity<GenericResponse<List<AppointmentResponse>>> findAppointmentsByAuthor(@PathVariable final String email) {
 
-        List<Appointment> appointments = appointmentService.findByEmail(email);
+        List<AppointmentResponse> appointments = appointmentService.findByEmail(email);
 
         if (appointments == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

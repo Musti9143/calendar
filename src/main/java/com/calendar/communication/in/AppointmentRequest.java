@@ -1,6 +1,6 @@
 package com.calendar.communication.in;
 
-import com.calendar.entities.Appointment;
+import com.calendar.entities.Location;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 public record AppointmentRequest(String id, String title, String email, Timestamp startDateTime, Timestamp endDateTime,
-                                 String description, Appointment.Location location) {
+                                 String description, Location location) {
     public boolean isValid() {
 
         boolean isEmailValid = EmailValidator.getInstance().isValid(this.email);
@@ -29,5 +29,16 @@ public record AppointmentRequest(String id, String title, String email, Timestam
         }
 
         return this.isValid();
+    }
+
+    public boolean isAllValid() {
+
+        return this.isValid() &&
+                location != null &&
+                StringUtils.isNotBlank(location.getCity()) &&
+                StringUtils.isNotBlank(location.getStreet()) &&
+                StringUtils.isNotBlank(location.getStreetNumber()) &&
+                StringUtils.isNotBlank(location.getPostalCode()) &&
+                StringUtils.isNotBlank(location.getCountry());
     }
 }

@@ -1,9 +1,12 @@
 package com.calendar.services;
 
 import com.calendar.communication.in.AppointmentRequest;
+import com.calendar.communication.out.AppointmentResponse;
 import com.calendar.entities.Appointment;
+import com.calendar.entities.Location;
 import com.calendar.entities.User;
 import com.calendar.mapper.AppointmentMapper;
+import com.calendar.mapper.LocationMapper;
 import com.calendar.repositories.IAppointmentRepository;
 import com.calendar.repositories.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,27 +37,34 @@ class AppointmentServiceTest {
     @Mock
     private AppointmentMapper appointmentMapper;
 
+    @Mock
+    private LocationMapper locationMapper;
+
     @InjectMocks
     private AppointmentService appointmentService;
 
     private AppointmentRequest appointmentRequest;
+    private AppointmentResponse appointmentResponse;
     private Appointment appointment;
     private List<Appointment> appointments;
     private User user;
     private static final String EMAIL = "max.power@email.com";
-    private Appointment.Location location;
+    private Location location;
 
 
     @BeforeEach
     void setUp() {
         appointments = new ArrayList<>();
         user = new User("Max", "Power", EMAIL, "123456qwe");
-        location = new Appointment.Location("Musterstrasse","123","12345",
+        location = new Location("Musterstrasse","123","12345",
                 "Musterstadt", "DEU");
         appointmentRequest = new AppointmentRequest("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27", "Title" ,
                 EMAIL, Timestamp.valueOf("2014-01-01 00:00:00"),
                 Timestamp.valueOf("2014-01-01 00:00:00"), "description", location);
         appointment = new Appointment("Title", user, Timestamp.valueOf("2014-01-01 00:00:00"),
+                Timestamp.valueOf("2014-01-01 00:00:00"), "description", location);
+        appointmentResponse = new AppointmentResponse("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27","Title" ,
+                EMAIL, Timestamp.valueOf("2014-01-01 00:00:00"),
                 Timestamp.valueOf("2014-01-01 00:00:00"), "description", location);
         appointments.add(appointment);
     }
@@ -116,7 +126,8 @@ class AppointmentServiceTest {
 
         when(appointmentRepository.findById(UUID.fromString(appointmentRequest.id()))).
                 thenReturn(Optional.ofNullable(appointment));
-
+        //TODO
+        when(appointmentMapper.updateAppointment(appointmentRequest, appointment)).thenReturn(appointment);
         boolean result = appointmentService.update(appointmentRequest);
 
         assertTrue(result);
@@ -155,13 +166,14 @@ class AppointmentServiceTest {
         // GIVEN
         when(userRepository.findByEmail(EMAIL)).thenReturn(user);
         when(appointmentRepository.findByAuthor(user)).thenReturn(appointments);
+        when(appointmentMapper.toAppointmentResponseList(appointments)).thenReturn(List.of(appointmentResponse));
 
         // WHEN
-        List<Appointment> result = appointmentService.findByEmail(EMAIL);
+        List<AppointmentResponse> result = appointmentService.findByEmail(EMAIL);
 
         // THEN
         assertNotNull(result);
-        assertEquals(result.get(0), appointments.get(0));
+        assertEquals(result.get(0), appointmentResponse);
 
         verify(userRepository, times(1)).findByEmail(EMAIL);
         verify(appointmentRepository, times(1)).findByAuthor(user);
@@ -174,7 +186,7 @@ class AppointmentServiceTest {
         when(userRepository.findByEmail(EMAIL)).thenReturn(null);
 
         // WHEN
-        List<Appointment> result = appointmentService.findByEmail(EMAIL);
+        List<AppointmentResponse> result = appointmentService.findByEmail(EMAIL);
 
         // THEN
         assertNull(result);

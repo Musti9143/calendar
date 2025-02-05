@@ -17,30 +17,6 @@ import java.util.UUID;
 @Entity(name = "appointment")
 public class Appointment implements Serializable {
 
-    @Embeddable
-    @Data
-    public static class Location{
-
-        private String street;
-        private String streetNumber;
-        private String postalCode;
-        private String city;
-        private String country;
-
-        public Location(@Nonnull final String street, @Nonnull final String streetNumber, @Nonnull final String postalCode,
-                        @Nonnull final String city, @Nonnull final String country) {
-            this.street = street;
-            this.streetNumber = streetNumber;
-            this.postalCode = postalCode;
-            this.city = city;
-            this.country = country;
-        }
-
-        public Location() {
-
-        }
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;

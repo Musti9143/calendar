@@ -1,9 +1,11 @@
 package com.calendar.services;
 
 import com.calendar.communication.in.AppointmentRequest;
+import com.calendar.communication.out.AppointmentResponse;
 import com.calendar.entities.Appointment;
 import com.calendar.entities.User;
 import com.calendar.mapper.AppointmentMapper;
+import com.calendar.mapper.LocationMapper;
 import com.calendar.repositories.IAppointmentRepository;
 import com.calendar.repositories.IUserRepository;
 import jakarta.annotation.Nullable;
@@ -17,13 +19,16 @@ import java.util.UUID;
 public class AppointmentService {
     private final IAppointmentRepository appointmentRepository;
     private final AppointmentMapper appointmentMapper;
+    private final LocationMapper locationMapper;
     private final IUserRepository userRepository;
 
     public AppointmentService(final IAppointmentRepository appointmentRepository,
                               final AppointmentMapper appointmentMapper,
+                              final LocationMapper locationMapper,
                               final IUserRepository userRepository) {
         this.appointmentRepository = appointmentRepository;
         this.appointmentMapper = appointmentMapper;
+        this.locationMapper = locationMapper;
         this.userRepository = userRepository;
     }
 
@@ -59,22 +64,21 @@ public class AppointmentService {
             return false;
 
         Appointment appointment = optionalAppointment.get();
-        appointment.setTitle(appointmentRequest.title());
-        appointment.setDescription(appointmentRequest.description());
-        appointment.setStartDateTime(appointmentRequest.startDateTime());
-        appointment.setEndDateTime(appointmentRequest.endDateTime());
+
+        appointment.setLocation(locationMapper.updateLocation(appointmentRequest.location(), appointment.getLocation()));
+        appointment = appointmentMapper.updateAppointment(appointmentRequest, appointment); // MapStruct verwenden
 
         appointmentRepository.save(appointment);
         return true;
     }
 
     @Nullable
-    public List<Appointment> findByEmail(final String email) {
+    public List<AppointmentResponse> findByEmail(final String email) {
 
         User user = userRepository.findByEmail(email);
 
         if (user == null)
             return null;
-        return appointmentRepository.findByAuthor(user);
+        return appointmentMapper.toAppointmentResponseList(appointmentRepository.findByAuthor(user));
     }
 }

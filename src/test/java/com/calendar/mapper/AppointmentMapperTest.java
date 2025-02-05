@@ -3,21 +3,23 @@ package com.calendar.mapper;
 import com.calendar.communication.in.AppointmentRequest;
 import com.calendar.communication.out.AppointmentResponse;
 import com.calendar.entities.Appointment;
+import com.calendar.entities.Location;
 import com.calendar.entities.User;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
 import java.sql.Timestamp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class AppointmentMapperTest {
+class AppointmentMapperTest{
 
-    private final AppointmentMapper appointmentMapper = new AppointmentMapper();
+    private final AppointmentMapper appointmentMapper = Mappers.getMapper(AppointmentMapper.class);
 
     @Test
     void toAppointment_shouldMapAppointmentRequestToAppointment() {
 
-        Appointment.Location location = new Appointment.Location("Musterstrasse","123",
+        Location location = new Location("Musterstrasse","123",
                 "12345","Musterstadt", "DEU");
         final AppointmentRequest appointmentRequest = new AppointmentRequest("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27",
                 "Title", "Max.Power@email.com", Timestamp.valueOf("2014-01-01 00:00:00"),
@@ -37,7 +39,7 @@ class AppointmentMapperTest {
 
         final User user = new User("Max", "Mustermann", "Max.Power@email.com",
                 "123456qwe");
-        Appointment.Location location = new Appointment.Location("Musterstrasse","123",
+        Location location = new Location("Musterstrasse","123",
                 "12345","Musterstadt", "DEU");
         final Appointment appointment = new Appointment("Title", user, Timestamp.valueOf("2014-01-01 00:00:00"),
                 Timestamp.valueOf("2014-01-01 00:00:00"), "description", location);
