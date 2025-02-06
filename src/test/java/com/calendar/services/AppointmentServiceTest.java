@@ -126,7 +126,7 @@ class AppointmentServiceTest {
 
         when(appointmentRepository.findById(UUID.fromString(appointmentRequest.id()))).
                 thenReturn(Optional.ofNullable(appointment));
-        //TODO
+        when(locationMapper.updateLocation(appointmentRequest.location(),appointment.getLocation())).thenReturn(location);
         when(appointmentMapper.updateAppointment(appointmentRequest, appointment)).thenReturn(appointment);
         boolean result = appointmentService.update(appointmentRequest);
 

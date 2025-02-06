@@ -65,8 +65,9 @@ public class AppointmentService {
 
         Appointment appointment = optionalAppointment.get();
 
-        appointment.setLocation(locationMapper.updateLocation(appointmentRequest.location(), appointment.getLocation()));
-        appointment = appointmentMapper.updateAppointment(appointmentRequest, appointment); // MapStruct verwenden
+        // MapStruct verwenden
+        appointment.setLocation(locationMapper.updateLocation(appointmentRequest.location(), appointment.getLocation())); //setzen des location
+        appointment = appointmentMapper.updateAppointment(appointmentRequest, appointment); //setzen der restlichen membervariablen von appointment, location wird ignoriert
 
         appointmentRepository.save(appointment);
         return true;
