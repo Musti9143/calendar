@@ -3,7 +3,7 @@ package com.calendar.communication.in;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
-public record UserRequest(String name, String surname, String email) {
+public record UserRequest(String name, String surname, String email, String password) {
 
     public boolean isValid() {
 

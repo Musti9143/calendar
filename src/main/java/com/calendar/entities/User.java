@@ -27,10 +27,13 @@ public class User implements Serializable {
     private String surname;
     @Nonnull
     private String email;
+    @Nonnull
+    private String password;
 
-    public User(@Nonnull final String name, @Nonnull final String surname, @Nonnull final String email) {
+    public User(@Nonnull final String name, @Nonnull final String surname, @Nonnull final String email, @Nonnull final String password) {
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.password = password;
     }
 }

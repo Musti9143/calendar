@@ -20,7 +20,7 @@ class AppointmentMapperTest {
         final AppointmentRequest appointmentRequest = new AppointmentRequest("b68eddcf-56f7-47f2-ba0c-ea2cfcfbca27",
                 "Title", "Max.Power@email.com", Timestamp.valueOf("2014-01-01 00:00:00"),
                 Timestamp.valueOf("2014-01-01 00:00:00"), "description");
-        final User user = new User("Max", "Mustermann", "Max.Power@email.com");
+        final User user = new User("Max", "Mustermann", "Max.Power@email.com", "123456qwe");
 
         final Appointment appointment = appointmentMapper.toAppointment(appointmentRequest,user);
         assertEquals(appointmentRequest.email() , appointment.getAuthor().getEmail());
@@ -33,7 +33,7 @@ class AppointmentMapperTest {
     @Test
     void toAppointmentResponse_shouldMapAppointmentToAppointmentResponse() {
 
-        final User user = new User("Max", "Mustermann", "Max.Power@email.com");
+        final User user = new User("Max", "Mustermann", "Max.Power@email.com", "123456qwe");
         final Appointment appointment = new Appointment("Title", user, Timestamp.valueOf("2014-01-01 00:00:00"),
                 Timestamp.valueOf("2014-01-01 00:00:00"), "description");
 
