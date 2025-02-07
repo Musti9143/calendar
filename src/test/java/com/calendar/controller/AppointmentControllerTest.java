@@ -1,9 +1,9 @@
 package com.calendar.controller;
 
 
+import com.calendar.communication.in.AppointmentRequest;
 import com.calendar.communication.out.ErrorResponse;
 import com.calendar.communication.out.GenericResponse;
-import com.calendar.communication.in.AppointmentRequest;
 import com.calendar.entities.Appointment;
 import com.calendar.entities.User;
 import com.calendar.services.AppointmentService;
@@ -24,7 +24,10 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AppointmentControllerTest {
