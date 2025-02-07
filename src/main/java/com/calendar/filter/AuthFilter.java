@@ -15,11 +15,9 @@ import java.io.IOException;
 public class AuthFilter implements Filter {
 
     private final PasswordService passwordService;
-    private final ObjectMapper objectMapper;
 
-    public AuthFilter(@Nonnull final PasswordService passwordService, ObjectMapper objectMapper) {
+    public AuthFilter(@Nonnull final PasswordService passwordService) {
         this.passwordService = passwordService;
-        this.objectMapper = objectMapper;
     }
 
     @Override
