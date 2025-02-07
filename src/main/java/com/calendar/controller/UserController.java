@@ -4,7 +4,6 @@ import com.calendar.communication.in.UserRequest;
 import com.calendar.communication.out.ErrorResponse;
 import com.calendar.communication.out.GenericResponse;
 import com.calendar.communication.out.UserResponse;
-import com.calendar.services.PasswordService;
 import com.calendar.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

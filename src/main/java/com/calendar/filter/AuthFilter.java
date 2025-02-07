@@ -1,7 +1,6 @@
 package com.calendar.filter;
 
 import com.calendar.services.PasswordService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
