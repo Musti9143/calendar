@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class AppointmentMapperTest{
+class AppointmentMapperTest {
 
     private final AppointmentMapper appointmentMapper = Mappers.getMapper(AppointmentMapper.class);
 
