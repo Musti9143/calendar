@@ -1,7 +1,7 @@
 package com.calendar.config;
 
-import com.calendar.logging.AuthFilter;
-import com.calendar.logging.RequestResponseLoggingFilter;
+import com.calendar.filter.AuthFilter;
+import com.calendar.filter.RequestResponseLoggingFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,5 @@
-package com.calendar.logging;
+package com.calendar.filter;
 
-import com.calendar.communication.out.ErrorResponse;
 import com.calendar.services.PasswordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nonnull;
@@ -34,8 +33,6 @@ public class AuthFilter implements Filter {
 
         if (StringUtils.isBlank(headerEmail) || StringUtils.isBlank(headerPassword)) {
             httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.setContentType("application/json");
-            response.getWriter().write(objectMapper.writeValueAsString(new ErrorResponse("Bad Request")));
             return;
         }
 
@@ -43,8 +40,6 @@ public class AuthFilter implements Filter {
 
         if (!isAuthenticated) {
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write(objectMapper.writeValueAsString(new ErrorResponse("Unauthorized")));
             return;
         }
 

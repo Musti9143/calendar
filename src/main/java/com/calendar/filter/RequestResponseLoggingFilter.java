@@ -1,4 +1,4 @@
-package com.calendar.logging;
+package com.calendar.filter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
