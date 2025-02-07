@@ -1,9 +1,9 @@
 package com.calendar.controller;
 
+import com.calendar.communication.in.AppointmentRequest;
 import com.calendar.communication.out.AppointmentResponse;
 import com.calendar.communication.out.ErrorResponse;
 import com.calendar.communication.out.GenericResponse;
-import com.calendar.communication.in.AppointmentRequest;
 import com.calendar.services.AppointmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

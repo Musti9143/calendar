@@ -1,10 +1,10 @@
 package com.calendar.controller;
 
 
+import com.calendar.communication.in.AppointmentRequest;
 import com.calendar.communication.out.AppointmentResponse;
 import com.calendar.communication.out.ErrorResponse;
 import com.calendar.communication.out.GenericResponse;
-import com.calendar.communication.in.AppointmentRequest;
 import com.calendar.entities.Appointment;
 import com.calendar.entities.Location;
 import com.calendar.entities.User;
