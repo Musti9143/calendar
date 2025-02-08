@@ -6,7 +6,6 @@ import com.calendar.entities.Appointment;
 import com.calendar.entities.Location;
 import com.calendar.entities.User;
 import com.calendar.mapper.AppointmentMapper;
-import com.calendar.mapper.LocationMapper;
 import com.calendar.repositories.IAppointmentRepository;
 import com.calendar.repositories.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,9 +42,6 @@ class AppointmentServiceTest {
 
     @Mock
     private AppointmentMapper appointmentMapper;
-
-    @Mock
-    private LocationMapper locationMapper;
 
     @InjectMocks
     private AppointmentService appointmentService;
@@ -133,8 +129,7 @@ class AppointmentServiceTest {
 
         when(appointmentRepository.findById(UUID.fromString(appointmentRequest.id()))).
                 thenReturn(Optional.ofNullable(appointment));
-        when(locationMapper.updateLocation(appointmentRequest.location(),appointment.getLocation())).thenReturn(location);
-        when(appointmentMapper.updateAppointment(appointmentRequest, appointment)).thenReturn(appointment);
+
         boolean result = appointmentService.update(appointmentRequest);
 
         assertTrue(result);

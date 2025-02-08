@@ -4,29 +4,31 @@ import com.calendar.communication.in.AppointmentRequest;
 import com.calendar.communication.out.AppointmentResponse;
 import com.calendar.entities.Appointment;
 import com.calendar.entities.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface AppointmentMapper {
+@Component
+public class AppointmentMapper {
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(source = "user", target = "author") // Stellt Verbindung zwischen User und Author her
-    Appointment toAppointment(final AppointmentRequest appointmentRequest, final User user);
+    public Appointment toAppointment(final AppointmentRequest appointmentRequest, final User user) {
+        return new Appointment(appointmentRequest.title(), user, appointmentRequest.startDateTime(),
+                appointmentRequest.endDateTime(), appointmentRequest.description(), appointmentRequest.location());
+    }
 
-    @Mapping(source = "appointment.author.email", target = "email") // Spezifisch für den Email-Zusammenhang
-    AppointmentResponse toAppointmentResponse(final Appointment appointment);
+    public AppointmentResponse toAppointmentResponse(final Appointment appointment) {
+        return new AppointmentResponse(appointment.getId().toString(), appointment.getTitle(), appointment.getAuthor().getEmail(),
+                appointment.getStartDateTime(), appointment.getEndDateTime(), appointment.getDescription(), appointment.getLocation());
+    }
 
-    // Mapping zwischen AppointmentRequest und Appointment.
-    @Mapping(target = "id", ignore = true)  // Ignoriere nicht zu ändernde Felder
-    @Mapping(target = "author", ignore = true) // Ignoriere das Author-Feld
-    @Mapping(target = "location", ignore = true)
-    Appointment updateAppointment(AppointmentRequest appointmentRequest, @MappingTarget Appointment appointment);
+    public List<AppointmentResponse> toAppointmentResponseList(final List<Appointment> appointmentList) {
 
-    @Mapping(source = "appointment.author.email", target = "email")
-    List<AppointmentResponse> toAppointmentResponseList(final List<Appointment> appointments);
+        return appointmentList
+                // forEach durch appointmentList
+                .stream()
+                // aktuelles object aus appoinmentList wird zu apppointmentResponse gemappt
+                .map(this::toAppointmentResponse)
+                // alle appointmentResponses werden in eine List gespeichert
+                .toList();
+    }
 }
