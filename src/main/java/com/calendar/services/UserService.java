@@ -26,10 +26,9 @@ public class UserService {
     public boolean create(@Nonnull final UserRequest userRequest) {
         final User user = userMapper.toUser(userRequest);
 
-        String hashedPassword = passwordService.hashPassword(user.getPassword());
-
         if (userRepository.findByEmail(user.getEmail()) == null) {
 
+            String hashedPassword = passwordService.hashPassword(user.getPassword());
             user.setPassword(hashedPassword);
             userRepository.save(user);
             return true;
