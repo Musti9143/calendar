@@ -24,11 +24,8 @@ public class AppointmentMapper {
     public List<AppointmentResponse> toAppointmentResponseList(final List<Appointment> appointmentList) {
 
         return appointmentList
-                // forEach durch appointmentList
                 .stream()
-                // aktuelles object aus appoinmentList wird zu apppointmentResponse gemappt
                 .map(this::toAppointmentResponse)
-                // alle appointmentResponses werden in eine List gespeichert
                 .toList();
     }
 }
