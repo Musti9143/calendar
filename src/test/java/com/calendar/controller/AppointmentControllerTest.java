@@ -2,10 +2,13 @@ package com.calendar.controller;
 
 
 import com.calendar.communication.in.AppointmentRequest;
+import com.calendar.communication.out.AppointmentResponse;
 import com.calendar.communication.out.ErrorResponse;
 import com.calendar.communication.out.GenericResponse;
 import com.calendar.entities.Appointment;
+import com.calendar.entities.Location;
 import com.calendar.entities.User;
+import com.calendar.mapper.AppointmentMapper;
 import com.calendar.services.AppointmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,26 +41,36 @@ class AppointmentControllerTest {
     @Mock
     private AppointmentRequest appointmentRequest;
 
+    @Mock
+    private AppointmentResponse appointmentResponse;
+
+    @Mock
+    private AppointmentMapper appointmentMapper;
+
     @InjectMocks
     private AppointmentController appointmentController;
 
-    private List<Appointment> appointments;
+    private List<AppointmentResponse> appointments;
     private User user;
     private Appointment appointment;
+    private Location location;
+
 
     @BeforeEach
     void setUp() {
 
+        location = new Location("Musterstrasse","123","12345", "Musterstadt", "DEU");
         appointments = new ArrayList<>();
         user = new User("Max", "Power", "max.power@email.com", "123456qwe");
         appointment = new Appointment("Title", user, Timestamp.valueOf("2014-01-01 00:00:00"),
-                Timestamp.valueOf("2014-01-01 00:00:00"), "description");
+                Timestamp.valueOf("2014-01-01 00:00:00"), "description", location);
+        appointmentResponse = appointmentMapper.toAppointmentResponse(appointment);
     }
 
     @Test
     void createAppointment_shouldReturnOK_whenAppointmentIsCreated() {
 
-        when(appointmentRequest.isValid()).thenReturn(true);
+        when(appointmentRequest.isAllValid()).thenReturn(true);
         when(appointmentService.create(appointmentRequest)).thenReturn(true);
 
         ResponseEntity<GenericResponse<String>> responseEntity = appointmentController.
@@ -72,7 +85,7 @@ class AppointmentControllerTest {
     @Test
     void createAppointment_shouldReturnBadRequest_whenAppointmentRequestIsNotValid() {
 
-        when(appointmentRequest.isValid()).thenReturn(false);
+        when(appointmentRequest.isAllValid()).thenReturn(false);
 
         ResponseEntity<GenericResponse<String>> responseEntity = appointmentController.
                 createAppointment(appointmentRequest);
@@ -86,7 +99,7 @@ class AppointmentControllerTest {
     @Test
     void createAppointment_shouldReturnNotFound_whenAuthorDoesNotExist() {
 
-        when(appointmentRequest.isValid()).thenReturn(true);
+        when(appointmentRequest.isAllValid()).thenReturn(true);
         when(appointmentService.create(appointmentRequest)).thenReturn(false);
 
         ResponseEntity<GenericResponse<String>> responseEntity = appointmentController.
@@ -133,12 +146,12 @@ class AppointmentControllerTest {
     @Test
     void findAppointmentsByAuthor_shouldReturnListOfAppointments_whenAppointmentOfAuthorFound() {
 
-        appointments.add(appointment);
+        appointments.add(appointmentResponse);
         when(appointmentService.findByEmail(user.getEmail())).thenReturn(appointments);
 
-        List<Appointment> result = appointmentService.findByEmail(user.getEmail());
+        List<AppointmentResponse> result = appointmentService.findByEmail(user.getEmail());
 
-        ResponseEntity<GenericResponse<List<Appointment>>> responseEntity = appointmentController.
+        ResponseEntity<GenericResponse<List<AppointmentResponse>>> responseEntity = appointmentController.
                 findAppointmentsByAuthor(user.getEmail());
 
         assertNotNull(result);
@@ -152,7 +165,7 @@ class AppointmentControllerTest {
 
         when(appointmentService.findByEmail(user.getEmail())).thenReturn(null);
 
-        ResponseEntity<GenericResponse<List<Appointment>>> responseEntity = appointmentController.
+        ResponseEntity<GenericResponse<List<AppointmentResponse>>> responseEntity = appointmentController.
                 findAppointmentsByAuthor(user.getEmail());
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -166,7 +179,7 @@ class AppointmentControllerTest {
 
         when(appointmentService.findByEmail(user.getEmail())).thenReturn(appointments);
 
-        ResponseEntity<GenericResponse<List<Appointment>>> responseEntity = appointmentController.
+        ResponseEntity<GenericResponse<List<AppointmentResponse>>> responseEntity = appointmentController.
                 findAppointmentsByAuthor(user.getEmail());
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());

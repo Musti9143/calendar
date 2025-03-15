@@ -1,6 +1,7 @@
 package com.calendar.services;
 
 import com.calendar.communication.in.AppointmentRequest;
+import com.calendar.communication.out.AppointmentResponse;
 import com.calendar.entities.Appointment;
 import com.calendar.entities.User;
 import com.calendar.mapper.AppointmentMapper;
@@ -63,18 +64,20 @@ public class AppointmentService {
         appointment.setDescription(appointmentRequest.description());
         appointment.setStartDateTime(appointmentRequest.startDateTime());
         appointment.setEndDateTime(appointmentRequest.endDateTime());
+        appointment.setLocation(appointmentRequest.location());
+
 
         appointmentRepository.save(appointment);
         return true;
     }
 
     @Nullable
-    public List<Appointment> findByEmail(final String email) {
+    public List<AppointmentResponse> findByEmail(final String email) {
 
         User user = userRepository.findByEmail(email);
 
         if (user == null)
             return null;
-        return appointmentRepository.findByAuthor(user);
+        return appointmentMapper.toAppointmentResponseList(appointmentRepository.findByAuthor(user));
     }
 }
